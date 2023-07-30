@@ -9,9 +9,7 @@ function get_aspect_ratio($width, $height) {
     $gcd = static function($width, $height) use (&$gcd) {
         return ($width % $height) ? $gcd($height, $width % $height) : $height;
     };
-
     $divisor = $gcd($width, $height);
-
     return $width / $divisor . ':' . $height / $divisor;
 }
 
@@ -21,16 +19,11 @@ function letterbox_img($image, $background = false, $canvas_w, $canvas_h) {
     }
     $img_h = imagesy($image);
     $img_w = imagesx($image);
-
     $img = imagecreatetruecolor($canvas_w, $canvas_h);
-
     imagefill($img, 0, 0, $background);
-
-    $xoffset = ($canvas_w - $img_w) / 2;
-    $yoffset = ($canvas_h - $img_h) / 2;
-
-	imagecopymerge($img, $image, $xoffset, $yoffset, 0,0, $img_w, $img_h, 100);
-
+    $xoffset = round(($canvas_w - $img_w) / 2);
+    $yoffset = round(($canvas_h - $img_h) / 2);
+    imagecopymerge($img, $image, $xoffset, $yoffset, 0,0, $img_w, $img_h, 100);
     return $img; 
 }
 
