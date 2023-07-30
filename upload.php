@@ -93,8 +93,8 @@ if(isset($_POST["Submit"])) {
 			}
 	}
 	
-	process_img($gdimage, 100, 75 "photos/$photo_id.t.jpg");
-	process_img($gdimage, 240, 180 "photos/$photo_id.m.jpg");
+	process_img($gdimage, 100, 75, "photos/$photo_id.t.jpg");
+	process_img($gdimage, 240, 180, "photos/$photo_id.m.jpg");
 	imagejpeg(imagescale($gdimage, 500), "photos/$photo_id.jpg");
 	
 	$stmt = $conn->prepare("INSERT INTO photos (title, camera, uploaded_by) VALUES (?, ?, ?)");
