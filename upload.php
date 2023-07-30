@@ -29,14 +29,16 @@ function letterbox_img($image, $background = false, $canvas_w, $canvas_h) {
 
  
 function process_img($img, $width, $height, $fn) {
+	$gdimage_t_h = $height;
 	$gdimage_t = clone_img_resource($img);
 	$gdimage_t_as = get_aspect_ratio(imagesx($gdimage_t), imagesy($gdimage_t));
 	$gdimage_t_as = explode(':', $gdimage_t_as);
 	$gdimage_t_w = round($gdimage_t_as[0]*($height/$gdimage_t_as[1]));
 	if ($gdimage_t_w > $width) {
+		$gdimage_t_h = round($gdimage_t_as[1]*($width/$gdimage_t_as[0]));
 		$gdimage_t_w = $width;
 	}
-	$gdimage_t = imagescale($gdimage_t, $gdimage_t_w, $height);
+	$gdimage_t = imagescale($gdimage_t, $gdimage_t_w, $gdimage_t_h);
 	$gdimage_t = letterbox_img($gdimage_t, false, $width, $height);
 	imagejpeg($gdimage_t, $fn);
 }
