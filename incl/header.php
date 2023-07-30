@@ -8,7 +8,7 @@ if(isset($_SESSION["id"])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<title><?php echo $website["instance_name"]; ?>: <?php echo $page["title"]; ?></title>
+	<title><?php echo $page["title"]; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="/css/flickr.css?version=1.195" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
