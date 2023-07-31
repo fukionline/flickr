@@ -24,8 +24,7 @@ if(isset($_POST["Submit"])) {
 			die("<p>Sorry, that filetype is not allowed</p>");
 		}
 	}
-	// $camera = getCamera($upload_tgt_preload);
-	$camera = NULL;
+	$camera = imgGetCamera($upload_tgt_preload);
 	$gdimage = NULL;
 
 	switch (exif_imagetype($upload_tgt_preload)) {
