@@ -31,7 +31,7 @@ if(isset($_POST["Submit"])) {
 			$_SESSION["screen_name"] = $screen_name;
 			// Update last login date
 			$lastLogin = date('Y-m-d H:i:s');
-			$stmt = $conn->prepare("UPDATE users SET last_login=? WHERE email=?");
+			$stmt = $conn->prepare("UPDATE users SET last_login=:last_login WHERE email=:email");
 			$stmt->bindParam(":last_login", $lastLogin);
 			$stmt->bindParam(":email", $email);
 			$stmt->execute();

@@ -68,7 +68,7 @@ function imgGetCamera($photo) {
 		if (@array_key_exists('Model', $exif_ifd0)) {
 			$return = $exif_ifd0["Model"];
 		} elseif (@array_key_exists('Make', $exif_ifd0)) {
-			$return = "A ".$exif_ifd0["Make"];
+			$return = $exif_ifd0["Make"];
 		}		
 	}
 	

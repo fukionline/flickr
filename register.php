@@ -19,12 +19,11 @@ if(isset($_POST["Submit"])) {
 	// And now, the actual signup
 	$result = $conn->query("SELECT email FROM users WHERE email = '$email'");
 	if($result->rowCount() == 0) {
-		$stmt = $conn->prepare("INSERT INTO users (screen_name, password, email) VALUES (?, ?, ?)");
-		stmt->bindParam(':screen_name', $username);
-		stmt->bindParam(':password', $password);
-		stmt->bindParam(':email', $email);
+		$stmt = $conn->prepare("INSERT INTO users (screen_name, password, email) VALUES (:screen_name, :password, :email)");
+		$stmt->bindParam(':screen_name', $username);
+		$stmt->bindParam(':password', $password);
+		$stmt->bindParam(':email', $email);
 		$stmt->execute();
-		$stmt->close();
 		// You may now login
 		$_SESSION["id"] = getNextID("SELECT * FROM users ORDER BY id DESC", "id");
 		$_SESSION["id"] = $_SESSION["id"] - 1;
