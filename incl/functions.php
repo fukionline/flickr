@@ -61,18 +61,26 @@ function imgProcess($img, $width, $height, $fn) {
 }
 
 function imgGetCamera($photo) {
-	$return = "Unavailable";
-	$exif_ifd0 = exif_read_data($photo ,'IFD0' ,0);     
+    $return = "Unavailable";
+    $exif_ifd0 = exif_read_data($photo ,'IFD0' ,0);     
 
-	if($exif_ifd0 != FALSE) {
-		if (@array_key_exists('Model', $exif_ifd0)) {
-			$return = $exif_ifd0["Model"];
-		} elseif (@array_key_exists('Make', $exif_ifd0)) {
-			$return = $exif_ifd0["Make"];
-		}		
-	}
-	
-	return $return;
+    if($exif_ifd0 != FALSE) {
+        if (@array_key_exists('Model', $exif_ifd0)) {
+            if (@array_key_exists('Make', $exif_ifd0)) {
+                if (strpos($exif_ifd0["Model"], $exif_ifd0["Make"]) === 0) {
+                    $return = $exif_ifd0["Model"];
+                } else {
+                    $return = $exif_ifd0["Make"] . " " . $exif_ifd0["Model"];
+                }
+            } else {
+                $return = $exif_ifd0["Model"];
+            }
+        } elseif (@array_key_exists('Make', $exif_ifd0)) {
+            $return = $exif_ifd0["Make"];
+        }        
+    }
+
+    return $return;
 }
 
 function getNextID($sql, $rowname) {
