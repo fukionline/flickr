@@ -1,5 +1,6 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
+require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/logincheck.php"); 
 
 if(isset($_POST["Submit"])) {
 	$title = $_POST["title"];
