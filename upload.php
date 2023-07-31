@@ -57,7 +57,10 @@ if(isset($_POST["Submit"])) {
 	imagejpeg(imagescale($gdimage, 500), "photos/$photo_id.jpg");
 	
 	$stmt = $conn->prepare("INSERT INTO photos (title, camera, uploaded_by) VALUES (?, ?, ?)");
-	$stmt->bind_param("ssi", $title, $camera, $user_id);
+	$stmt->bindParam(":title", $title);
+	$stmt->bindParam(":camera", $camera);
+	$stmt->bindParam(":uploaded_by", $uploaded_by);
+
 	$stmt->execute();
 	header("/photos.php");
 }
