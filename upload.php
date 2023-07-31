@@ -56,13 +56,12 @@ if(isset($_POST["Submit"])) {
 	imgProcess($gdimage, 240, 180, "photos/$photo_id.m.jpg");
 	imagejpeg(imagescale($gdimage, 500), "photos/$photo_id.jpg");
 	
-	$stmt = $conn->prepare("INSERT INTO photos (title, camera, uploaded_by) VALUES (?, ?, ?)");
+	$stmt = $conn->prepare("INSERT INTO photos (title, camera, uploaded_by) VALUES (:title, :camera, :uploaded_by)");
 	$stmt->bindParam(":title", $title);
 	$stmt->bindParam(":camera", $camera);
-	$stmt->bindParam(":uploaded_by", $uploaded_by);
-
+	$stmt->bindParam(":uploaded_by", $user_id);
 	$stmt->execute();
-	header("/photos.php");
+	header("Location: /photos.php");
 }
 
 ?>
