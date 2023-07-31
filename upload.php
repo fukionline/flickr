@@ -27,6 +27,28 @@ function letterbox_img($image, $background = false, $canvas_w, $canvas_h) {
     return $img; 
 }
 
+function orient_img($image, $filename) {
+    $exif = exif_read_data($filename);
+    
+    if (!empty($exif['Orientation'])) {
+        switch ($exif['Orientation']) {
+            case 3:
+               return imagerotate($image, 180, 0);
+                break;
+            
+            case 6:
+                return imagerotate($image, 90, 0);
+                break;
+            
+            case 8:
+                return imagerotate($image, -90, 0);
+                break;
+        }
+    }
+	
+    return $image;
+}
+
  
 function process_img($img, $width, $height, $fn) {
 	$gdimage_t_h = $height;
@@ -95,6 +117,7 @@ if(isset($_POST["Submit"])) {
 			}
 	}
 	
+	$gdimage = orient_img($gdimage, $upload_tgt_preload);
 	process_img($gdimage, 100, 75, "photos/$photo_id.t.jpg");
 	process_img($gdimage, 240, 180, "photos/$photo_id.m.jpg");
 	imagejpeg(imagescale($gdimage, 500), "photos/$photo_id.jpg");
