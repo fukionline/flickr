@@ -1,52 +1,42 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
-if(!isset($_GET["id"])) { die("No photo ID set."); }
 
-$photo = array();
-$user = array();
+if(!isset($_GET["id"])) { die("No photo ID set."); }
+$_GET["id"] = (int) $_GET["id"];
+
 $pcomment = array();
 $commenter = array();
 
-$result = $conn->query("SELECT * FROM photos WHERE id=" . $_GET["id"]);
-if($result->num_rows == 0) {
-	die("Photo does not exist.");
-	} else while($row = $result->fetch_assoc()) {
-		// Fetch photo info
-		$photo["title"] = htmlspecialchars($row["title"]);
-		$photo["description"] = htmlspecialchars($row["description"]);
-		$photo["camera"] = $row["camera"];
-		$photo["tags"] = htmlspecialchars($row["tags"]);
-		$photo["uploader"] = htmlspecialchars($row["uploaded_by"]);
-		$photo["upload_date"] = htmlspecialchars($row["uploaded_on"]);
-		// Fetch user info
-		$result = $conn->query("SELECT * FROM users WHERE id='" . $photo["uploader"]. "'");
-		while($row = $result->fetch_assoc()) {
-			$user["screen_name"] = htmlspecialchars($row["screen_name"]);
-			$user["buddy_icon"] = htmlspecialchars($row["display_picture"]);
-		}
-	}
+// Fetch photo info
+$stmt = $conn->prepare("SELECT * FROM photos WHERE id=:t0");
+$stmt->bindParam(':t0', $_GET['id']);
+$stmt->execute();
+foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo);
+if($photo == NULL) { die("photo is non existent"); }
+
+// Fetch user info
+$stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
+$stmt->bindParam(':t0', $photo->uploaded_by);
+$stmt->execute();
+foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
 // Parse the date
-$Now = new DateTime($photo["upload_date"]);
-$photo["date_month"] = $Now->format('M');
-$photo["date_day"] = $Now->format('d');
-$photo["date_year"] = $Now->format('Y');
-$photo["date_hour"] = $Now->format('h');
-$photo["date_mins"] = $Now->format('m');
-$photo["date_pmam"] = $Now->format('A');
+$Now = new DateTime($photo->uploaded_on);
 
 // Handle comments
 if(isset($_POST["submit"])) {
 	$comment = $_POST["comment"];
 	if(mb_strlen($comment, 'utf8') > 200) { die("comment text too long. max length is 200"); }
-	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (?, ?, ?)");
-	$stmt->bind_param("iis", $_GET["id"], $user_id, $comment);
+	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (:posted_to, :posted_by, :text)");
+	$stmt->bindParam(":posted_to", $_GET["id"]);
+	$stmt->bindParam(":posted_by", $user_id);
+	$stmt->bindParam(":text", $comment);
 	$stmt->execute();
 }
 
 ?>
 
-	<h1 style="margin-bottom: 10px;"><?php echo $photo["title"]; ?></h1>
+	<h1 style="margin-bottom: 10px;"><?php echo $photo->title; ?></h1>
 	<table>
 		<tr>			
 			<td id="GoodStuff"> 
@@ -60,18 +50,18 @@ if(isset($_POST["submit"])) {
 									
 										<table cellspacing="0" cellpadding="0" style="margin-top: 0px;">
 											<tr>
-												<td width="50" valign="top" style="padding-left: 0px; padding-top: 0px;"><a href="/photos/<?php echo $photo["uploader"]; ?>/"><img src="<?php echo $user["buddy_icon"]; ?>" alt="view profile" width="48" height="48" style="border: solid 1px #000; margin: 0px;" /></a></td>
+												<td width="50" valign="top" style="padding-left: 0px; padding-top: 0px;"><a href="/photos/<?php echo $photo->uploaded_by; ?>/"><img src="<?php echo $user->display_picture; ?>" alt="view profile" width="48" height="48" style="border: solid 1px #000; margin: 0px;" /></a></td>
 												<td valign="top" style="padding-bottom: 0px; padding-top: 0px; text-align: center;">
 												<a href="#" class="ShowUsYerDate">
-												<p style="margin-top: 0px; margin-bottom: 0px; font-size: 13px; font-weight: bold; text-transform: uppercase"><?php echo $photo["date_month"]; ?></p>												
-												<p style="line-height: 21px; margin-bottom: 0px; margin-top: 0px; font-size: 21px; font-weight: bold;"><?php echo $photo["date_day"]; ?></p>
-												<p style="line-height: 12px; margin-top: 0px; font-size: 12px; font-weight: normal; margin-bottom: 0px;"><?php echo $photo["date_year"]; ?></p>
+												<p style="margin-top: 0px; margin-bottom: 0px; font-size: 13px; font-weight: bold; text-transform: uppercase"><?php echo $Now->format('M'); ?></p>												
+												<p style="line-height: 21px; margin-bottom: 0px; margin-top: 0px; font-size: 21px; font-weight: bold;"><?php echo $Now->format('d'); ?></p>
+												<p style="line-height: 12px; margin-top: 0px; font-size: 12px; font-weight: normal; margin-bottom: 0px;"><?php echo $Now->format('Y');; ?></p>
 												</a>
 												</td>
 											</tr>																					
 										</table>
 
-										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="photos.php?user=<?php echo $photo["uploader"]; ?>" title="Link to <?php echo $user["screen_name"]; ?>'s photos"><?php echo $user["screen_name"]; ?></a> at <a href="#" class="pale"><?php echo $photo["date_hour"] . "." . $photo["date_mins"] . "<span style=\"text-transform: lowercase\">" . $photo["date_pmam"] . "</span>"; ?></a></p>
+										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="photos.php?user=<?php echo $photo->uploaded_by; ?>" title="Link to <?php echo $user->screen_name; ?>'s photos"><?php echo $user->screen_name; ?></a> at <a href="#" class="pale"><?php echo $Now->format('h') . "." . $Now->format('m') . "<span style=\"text-transform: lowercase\">" . $Now->format('A') . "</span>"; ?></a></p>
 										<p style="margin-top: 0px;">
 										<span class="DateTime">
 	<img src="/images/icon_public.gif" style="vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;" alt="This photo is public" width="15" height="15" />This photo is public.
@@ -82,9 +72,8 @@ if(isset($_POST["submit"])) {
 											<h4>TAGS</h4>
 											<div id="thetags">
 											<?php
-											$stmt = mysqli_query($conn, "SELECT tags FROM photos WHERE id=" . $_GET["id"]);
 											$thetags = [];
-											foreach($stmt as $result) $thetags = array_merge($thetags, explode(" ", $photo['tags']));
+											$thetags = array_merge($thetags, explode(" ", $photo->tags));
 											$thetags = array_unique($thetags);
 											foreach($thetags as $tag) {
 												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">$tag</a></div>";
@@ -97,9 +86,9 @@ if(isset($_POST["submit"])) {
 								</tr>
 								<tr>
 									<td colspan="2" style="padding-top: 10px; padding-left: 65px;">
-										<p style="width: 450px;"><?php echo $photo["description"]; ?></p>
-										<?php if(isset($photo["camera"])) {
-											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo["camera"] . "</a>.</p>";
+										<p style="width: 450px;"><?php echo $photo->description; ?></p>
+										<?php if(isset($photo->camera)) {
+											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo->camera . "</a>.</p>";
 										}
 										?>
 									</td>
@@ -139,8 +128,42 @@ if(isset($_POST["submit"])) {
 						</form>
 					</table>";
 					}
+					
+					$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to=:t0");
+					$stmt->bindParam(':t0', $_GET['id']);
+					$stmt->execute();
+					if($stmt->rowCount() > 0) {
+						echo "<h3>Comments</h3><table>";
+						foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $comment) {
+							$Now = new DateTime($comment->posted_on);
+							// Fetch user info
+							$stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
+							$stmt->bindParam(':t0', $comment->posted_by);
+							$stmt->execute();
+							foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $commenter);
+							// Comment html itself
+							echo "<tr>
+						<td valign=\"top\"><a href=\"/people/". $comment->posted_by . "/\" name=\"comment1162\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
+						<td>
+							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
+							<p>". $comment->text . "<br />
+								<span class=\"PostDateTime\">
+									Posted at 23 Mar '04, ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . " PST
+									|
+									<a href=\"/photo.gne?id=14619#comment1162\" class=\"PostLinks\">Permalink</a>
+								</span>
+							</p>
+						</td>
+					</tr>";
+						}
+					echo "				</table>
+				<br />
+			
+			</td>
+		</tr>
+	</table>";
+					}
 					?>
-<p>Comment displays are currently gone due to issues</p>
 				<br />
 			
 			</td>

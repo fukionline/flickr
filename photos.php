@@ -1,10 +1,5 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
-$photo_count = mysqli_num_rows(mysqli_query($conn, "SELECT id from photos ORDER BY uploaded_on DESC"));
-
-if(!isset($_GET['limit'])) { $page_number = 1; } else { $page_number = $_GET['limit']; }
-$limit = 16;
-$initial_page = ($page_number-1) * $limit;
 ?>
 	<h1>Everyone's photos.</h1>
 
@@ -17,19 +12,18 @@ $initial_page = ($page_number-1) * $limit;
 			<td id="GoodStuff">
 			<div>
 			<?php
-			$sql = mysqli_query($conn, "SELECT * from photos ORDER BY uploaded_on DESC"); 
-			$total_rows = mysqli_num_rows($sql);
-			$total_pages = ceil ($total_rows / $limit); 
-			$sql = mysqli_query($conn, "SELECT * FROM photos ORDER BY uploaded_on DESC LIMIT " . $initial_page . ',' . $limit);
-			while ($row = mysqli_fetch_assoc($sql)) {
-				$photo["id"] = $row["id"];
-				$photo["uploader"] = $row["uploaded_by"];
-				$result = $conn->query("SELECT * FROM users WHERE id='" . $photo["uploader"]. "'");
-				while($row = $result->fetch_assoc()) { $user["screen_name"] = $row["screen_name"]; }
+			$stmt = $conn->prepare("SELECT * from photos ORDER BY uploaded_on DESC LIMIT 16");
+			$stmt->execute();
+			foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
+				// Fetch user info
+				$stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
+				$stmt->bindParam(':t0', $photo->uploaded_by);
+				$stmt->execute();
+				foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $uploader);
 				echo "<p class=\"StreamList\">
-					<a href=\"/photo.php?id=" . $photo["id"] . "\"><img src=\"/photos/" . $photo["id"] . ".t.jpg\" border=\"0\"></a><br>
-					From <a href=\"/photos.php?user=" . $photo["uploader"] . "\">" . $user["screen_name"] . "</a>
-				</p>";
+				<a href=\"/photo.php?id=" . $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" border=\"0\"></a><br>
+				From <a href=\"/photos.php?user=" . $photo->uploaded_by . "\">" . $uploader->screen_name . "</a>
+			</p>";
 			}
 			?>
 			</div>

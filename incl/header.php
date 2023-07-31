@@ -1,9 +1,14 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/config.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
+
+if($_SERVER["PHP_SELF"] !== "/incl/photo.php") {
+	require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
+}
+
 if(isset($_SESSION["id"])) {
 	$user_id = $_SESSION["id"];
 }
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
