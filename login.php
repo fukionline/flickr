@@ -15,8 +15,8 @@ if(isset($_POST["Submit"])) {
 	
 	$sql = "SELECT * FROM users WHERE email='$email'";
 	$result = $conn->query($sql);
-	if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) { 
+	if ($result->rowCount() > 0) {
+		while($row = $result->fetch(PDO::FETCH_ASSOC)) { 
 			$id = $row["id"]; 
 			$password_db = $row["password"]; 
 			$isBanned = $row["isBanned"];
@@ -32,7 +32,8 @@ if(isset($_POST["Submit"])) {
 			// Update last login date
 			$lastLogin = date('Y-m-d H:i:s');
 			$stmt = $conn->prepare("UPDATE users SET last_login=? WHERE email=?");
-			$stmt->bind_param("ss", $lastLogin, $email);
+			$stmt->bindParam(":last_login", $lastLogin);
+			$stmt->bindParam(":email", $email);
 			$stmt->execute();
 			header("Location: /");
 		}
