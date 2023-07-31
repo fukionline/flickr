@@ -1,0 +1,3 @@
+<FilesMatch "\.gne$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
