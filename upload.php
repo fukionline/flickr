@@ -85,3 +85,5 @@ if(isset($_POST["Submit"])) {
 			</tr>
 		</table>
 	</form>	
+	
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

@@ -88,7 +88,9 @@ if(isset($_POST["submit"])) {
 									<td colspan="2" style="padding-top: 10px; padding-left: 65px;">
 										<p style="width: 450px;"><?php echo $photo->description; ?></p>
 										<?php if(isset($photo->camera)) {
+											if($photo->camera !== "Unavailable") {
 											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo->camera . "</a>.</p>";
+											}
 										}
 										?>
 									</td>
@@ -170,3 +172,4 @@ if(isset($_POST["submit"])) {
 		</tr>
 	</table>	
 
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

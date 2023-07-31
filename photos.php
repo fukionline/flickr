@@ -36,3 +36,5 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 			</td>
 		</tr>
 	</table>
+
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

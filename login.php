@@ -90,5 +90,4 @@ document.getElementById('first_field').focus();
 //-->
 </script>
 
-
-	<br clear="all" />
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>
