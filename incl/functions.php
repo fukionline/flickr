@@ -79,8 +79,8 @@ function getNextID($sql, $rowname) {
 	global $conn;
 	$i = 1;
 	$asd = $conn->query($sql);
-	if ($asd->num_rows > 0) {
-		while($row = $asd->fetch_assoc()) {
+	if ($asd->rowCount() > 0) {
+		while($row = $asd->fetch(PDO::FETCH_ASSOC)) {
 			if($row["$rowname"] = $i) {
 				$i++;
 			}
