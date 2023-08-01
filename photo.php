@@ -68,17 +68,20 @@ if(isset($_POST["submit"])) {
 										</span>
 										</p>
 
-										<div class="TagList">
+										<?php
+										if($photo->tags !== "") {
+										echo "<div class=\"TagList\">
 											<h4>TAGS</h4>
-											<div id="thetags">
-											<?php
+											<div id=\"thetags\">";	
 											$thetags = [];
 											$thetags = array_merge($thetags, explode(" ", $photo->tags));
 											$thetags = array_unique($thetags);
 											foreach($thetags as $tag) {
 												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">$tag</a></div>";
 											}
+										}
 											?>
+											
 											</div>
 											<br />
 										</div>

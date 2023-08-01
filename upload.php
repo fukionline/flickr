@@ -3,11 +3,15 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/logincheck.php"); 
 
 if(isset($_POST["Submit"])) {
-	$title = $_POST["title"];
+	$title = htmlspecialchars($_POST["title"]);
+	$description = htmlspecialchars($_POST["description"]);
+	$tags = htmlspecialchars($_POST["tags"]);
 	// ----------------------------------------------------------------------
 	if(mb_strlen($title, 'utf8') > 60) { die("photo title too long"); }
 	if(mb_strlen($title, 'utf8') < 1) { die("photo title cannot be empty"); }
-
+	if(mb_strlen($description, 'utf8') > 200) { die("description is too long"); }
+	if(substr_count($tags, ' ') < 1) { die("not enough tags"); }
+	if(substr_count($tags, ' ') > 10) { die("too much tags"); }
 	if(!isset($_FILES["file"])) {
 		die("no file");
 	}
@@ -57,8 +61,10 @@ if(isset($_POST["Submit"])) {
 	imgProcess($gdimage, 240, 180, "photos/$photo_id.m.jpg");
 	imagejpeg(imagescale($gdimage, 500), "photos/$photo_id.jpg");
 	
-	$stmt = $conn->prepare("INSERT INTO photos (title, camera, uploaded_by) VALUES (:title, :camera, :uploaded_by)");
+	$stmt = $conn->prepare("INSERT INTO photos (title, description, tags, camera, uploaded_by) VALUES (:title, :description, :tags, :camera, :uploaded_by)");
 	$stmt->bindParam(":title", $title);
+	$stmt->bindParam(":description", $description);
+	$stmt->bindParam(":tags", $tags);
 	$stmt->bindParam(":camera", $camera);
 	$stmt->bindParam(":uploaded_by", $user_id);
 	$stmt->execute();
@@ -74,6 +80,14 @@ if(isset($_POST["Submit"])) {
 			<tr>
 				<td class="Label">Title:</td>
 				<td valign="top" class="DateTime"><input type="text" name="title" value="" size="30"><br /></td>
+			</tr>
+			<tr>
+				<td class="Label">Description:</td>
+				<td valign="top" class="DateTime"><input type="text" name="description" value="" size="50"><br /></td>
+			</tr>
+			<tr>
+				<td class="Label">Tags:</td>
+				<td valign="top" class="DateTime"><input type="text" name="tags" value="" size="50"><br />enter at least 1 tag, separated by spaces</td>
 			</tr>
 			<tr>
 				<td class="Label">File:</td>
