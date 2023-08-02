@@ -1,6 +1,10 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
 
+$view_count = 0;
+$add_view = true;
+$current_ip = getIP();
+
 if(!isset($_GET["id"])) { die("No photo ID set."); }
 $_GET["id"] = (int) $_GET["id"];
 
@@ -28,6 +32,24 @@ if(isset($_POST["submit"])) {
 	$stmt->bindParam(":posted_to", $_GET["id"]);
 	$stmt->bindParam(":posted_by", $user_id);
 	$stmt->bindParam(":text", $comment);
+	$stmt->execute();
+}
+
+// Update views and get count
+$stmt = $conn->prepare("SELECT * FROM photo_views WHERE id=:t0");
+$stmt->bindParam(':t0', $_GET['id']);
+$stmt->execute();
+foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo_view_ip) {
+	if ($photo_view_ip->ip == $current_ip) {
+		$add_view = false;	
+	}
+	$view_count++;
+}
+
+if ($add_view) {
+	$stmt = $conn->prepare("INSERT INTO photo_views (id, ip) VALUES (:id, :ip)");
+	$stmt->bindParam(":id", $_GET['id']);
+	$stmt->bindParam(":ip", $current_ip);
 	$stmt->execute();
 }
 
@@ -102,7 +124,7 @@ if(isset($_POST["submit"])) {
 	<table style="margin-top:0px;">
 		<tr>
 			<td id="Hint">
-				<p style="margin-top: 20px;">TODO: views</p>				
+				<p style="margin-top: 20px;">Viewed <?php echo $view_count; ?> times </p>				
 				<img src="/images/spaceball.gif" alt="spacer image" width="180" height="1" style="border: none;">
 			</td>
 			<td valign="top" width="450"> 
