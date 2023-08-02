@@ -10,7 +10,6 @@ if(isset($_POST["Submit"])) {
 	if(mb_strlen($title, 'utf8') > 60) { die("photo title too long"); }
 	if(mb_strlen($title, 'utf8') < 1) { die("photo title cannot be empty"); }
 	if(mb_strlen($description, 'utf8') > 200) { die("description is too long"); }
-	if(substr_count($tags, ' ') < 1) { die("not enough tags"); }
 	if(substr_count($tags, ' ') > 10) { die("too much tags"); }
 	if(!isset($_FILES["file"])) {
 		die("no file");
