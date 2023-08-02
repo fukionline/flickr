@@ -51,6 +51,7 @@ if ($add_view) {
 	$stmt->bindParam(":id", $_GET['id']);
 	$stmt->bindParam(":ip", $current_ip);
 	$stmt->execute();
+	$view_count++;
 }
 
 ?>
@@ -124,7 +125,7 @@ if ($add_view) {
 	<table style="margin-top:0px;">
 		<tr>
 			<td id="Hint">
-				<p style="margin-top: 20px;">Viewed <?php echo $view_count; ?> times </p>				
+				<p style="margin-top: 20px;">This page has been viewed <b><?php echo $view_count; ?></b> times - as of <?php echo $Now->format('F') . " " . $Now->format('d'); ?>.</p>
 				<img src="/images/spaceball.gif" alt="spacer image" width="180" height="1" style="border: none;">
 			</td>
 			<td valign="top" width="450"> 
@@ -167,14 +168,14 @@ if ($add_view) {
 							foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $commenter);
 							// Comment html itself
 							echo "<tr>
-						<td valign=\"top\"><a href=\"/people/". $comment->posted_by . "/\" name=\"comment1162\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
+						<td valign=\"top\"><a href=\"/people/". $comment->posted_by . "/\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
 						<td>
 							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". $comment->text . "<br />
 								<span class=\"PostDateTime\">
 									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . "
 									|
-									<a href=\"/photo.gne?id=14619#comment1162\" class=\"PostLinks\">Permalink</a>
+									<a href=\"/photo.php?id=" . $_GET["id"] . "#comment" . $comment->id . "\" class=\"PostLinks\">Permalink</a>
 								</span>
 							</p>
 						</td>
