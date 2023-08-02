@@ -4,9 +4,6 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 if(!isset($_GET["id"])) { die("No photo ID set."); }
 $_GET["id"] = (int) $_GET["id"];
 
-$pcomment = array();
-$commenter = array();
-
 // Fetch photo info
 $stmt = $conn->prepare("SELECT * FROM photos WHERE id=:t0");
 $stmt->bindParam(':t0', $_GET['id']);
@@ -35,7 +32,7 @@ if(isset($_POST["submit"])) {
 }
 
 ?>
-
+<script type="text/javascript">document.title = "<?php echo $photo->title . " on " . $website["instance_name"] . " - Photo Sharing!"; ?>";</script> <!-- award for the world's hackiest fix goes to... -->
 	<h1 style="margin-bottom: 10px;"><?php echo $photo->title; ?></h1>
 	<table>
 		<tr>			
@@ -50,7 +47,7 @@ if(isset($_POST["submit"])) {
 									
 										<table cellspacing="0" cellpadding="0" style="margin-top: 0px;">
 											<tr>
-												<td width="50" valign="top" style="padding-left: 0px; padding-top: 0px;"><a href="/photos/<?php echo $photo->uploaded_by; ?>/"><img src="<?php echo $user->display_picture; ?>" alt="view profile" width="48" height="48" style="border: solid 1px #000; margin: 0px;" /></a></td>
+												<td width="50" valign="top" style="padding-left: 0px; padding-top: 0px;"><a href="/profile_photos.php?id=<?php echo $photo->uploaded_by; ?>"><img src="<?php echo $user->display_picture; ?>" alt="view profile" width="48" height="48" style="border: solid 1px #000; margin: 0px;" /></a></td>
 												<td valign="top" style="padding-bottom: 0px; padding-top: 0px; text-align: center;">
 												<a href="#" class="ShowUsYerDate">
 												<p style="margin-top: 0px; margin-bottom: 0px; font-size: 13px; font-weight: bold; text-transform: uppercase"><?php echo $Now->format('M'); ?></p>												
@@ -61,7 +58,7 @@ if(isset($_POST["submit"])) {
 											</tr>																					
 										</table>
 
-										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="photos.php?user=<?php echo $photo->uploaded_by; ?>" title="Link to <?php echo $user->screen_name; ?>'s photos"><?php echo $user->screen_name; ?></a> at <a href="#" class="pale"><?php echo $Now->format('h') . "." . $Now->format('m') . "<span style=\"text-transform: lowercase\">" . $Now->format('A') . "</span>"; ?></a></p>
+										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="/profile_photos.php?id=<?php echo $photo->uploaded_by; ?>" title="Link to <?php echo $user->screen_name; ?>'s photos"><?php echo $user->screen_name; ?></a> at <a href="#" class="pale"><?php echo $Now->format('h') . "." . $Now->format('m') . "<span style=\"text-transform: lowercase\">" . $Now->format('A') . "</span>"; ?></a></p>
 										<p style="margin-top: 0px;">
 										<span class="DateTime">
 	<img src="/images/icon_public.gif" style="vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;" alt="This photo is public" width="15" height="15" />This photo is public.
@@ -153,7 +150,7 @@ if(isset($_POST["submit"])) {
 							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". $comment->text . "<br />
 								<span class=\"PostDateTime\">
-									Posted at 23 Mar '04, ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . " PST
+									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . "
 									|
 									<a href=\"/photo.gne?id=14619#comment1162\" class=\"PostLinks\">Permalink</a>
 								</span>

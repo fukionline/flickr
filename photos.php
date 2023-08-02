@@ -1,5 +1,16 @@
 <?php 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
+
+if(!isset($_GET['start'])) {  
+	$start_from = 0;  
+} else {  
+	$start_from = $_GET['start'];  
+}
+
+if($start_from < 0) {
+	$start_from = 0;
+}
+
 ?>
 	<h1>Everyone's photos.</h1>
 
@@ -12,7 +23,11 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 			<td id="GoodStuff">
 			<div>
 			<?php
-			$stmt = $conn->prepare("SELECT * from photos ORDER BY uploaded_on DESC LIMIT 16");
+			$stmt = $conn->prepare("SELECT * from photos ORDER BY id");
+			$stmt->execute();
+			$limit = 16;
+			// Back to the usual
+			$stmt = $conn->prepare("SELECT * from photos ORDER BY id DESC LIMIT " . $start_from . ',' . $limit);
 			$stmt->execute();
 			foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
 				// Fetch user info
@@ -29,9 +44,14 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 			</div>
 			<br clear="all" />
 
-			<p style="border-top: 1px solid #eee; padding: 5px;">
-				<div style="float: right; padding-right: 10px;"><a href="/photos.php?start=16">Earlier &raquo;</a></div>
-			</p>
+			<p style="border-top: 1px solid #eee; padding: 5px;"></p>
+				<div style="float: right; padding-right: 10px;"><a href="/photos.php?start=<?php echo $start_from + 16; ?>">Earlier &raquo;</a></div>
+				<?php
+				if($start_from > 1) {
+					echo "<div style=\"float: left; padding-left: 10px;\"><a href=\"/photos.php?start=" . $start_from - 16 . "\">&laquo; More recently</a></div>";
+				}
+				?>
+			
 
 			</td>
 		</tr>

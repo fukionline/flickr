@@ -1,9 +1,7 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/config.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
 
-if($_SERVER["PHP_SELF"] !== "/incl/photo.php") {
-	require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
-}
 
 if(isset($_SESSION["id"])) {
 	$user_id = $_SESSION["id"];
@@ -13,7 +11,7 @@ if(isset($_SESSION["id"])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<title><?php echo $page["title"]; ?></title>
+	<title><?php echo $title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="/css/flickr.css?version=1.195" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/ico" href="/favicon.ico" />

@@ -1,0 +1,25 @@
+body { font: 14px Arial, Helvetica, sans-serif; color: #000000;	background: #FFFFFF url(../images/bg_home.jpg) repeat-x; margin: 0px; padding-bottom: 50px; }
+.SignUp { text-align: center; margin: 0px; width: 475px; padding-left: 175px; }
+.SignUp img { margin: 5px; }
+.LogIn { font-size: 13px; text-align: center; margin: 0px; width: 285px; padding-right: 30px; }
+.TellIt { width: 650px; text-align: left; font-size: 16px; margin-top: 20px; }
+.Other { font-weight: bold; margin-bottom: 0px; margin-top: 0px; padding-left: 15px; }
+.Cheater { margin-left: auto; margin-right: auto; margin-top: 0px; margin-bottom: 0px; text-align: center; }
+/* .Features { width: 700px; margin-top: 5px; margin-bottom: 10px; }
+.Features td { text-align: center; width: 33%; } */
+.Quotes { width: 650px; margin-top: 20px; }
+.Quotes td { text-align: center; vertical-align: top; width: 33%; }
+.Quotes img { border: none; }
+.Ludicorp { font-size: 11px; color: #666; margin-top: 20px;	}
+.Ludicorp img { border: none; margin-left: 3px; }
+
+
+.rbroundbox { width: 700px; }
+.rbtop div  { background:  url(../images/cnr_t_l.gif) no-repeat top left; }
+.rbtop      { background:  url(../images/cnr_t_r.gif) no-repeat top right; font-size: 2px;}
+.rbbot div  { background:  url(../images/cnr_b_l.gif) no-repeat bottom left; }
+.rbbot      { background:  url(../images/cnr_b_r.gif) no-repeat bottom right; font-size: 2px; }
+.rbtop div, .rbtop, .rbbot div, .rbbot { height: 8px;  margin-top: 0px; margin-bottom: 0px;}
+.rbcontent  { margin-top: 0px; margin-bottom: 0px; padding: 0px; text-align: left; border-left: 3px solid #D6DBF6; border-right: 3px solid #D6DBF6;} 
+.rbcontent td { vertical-align: top;}
+.rbcontent p { font-size: 15px; line-height: 17px;}
