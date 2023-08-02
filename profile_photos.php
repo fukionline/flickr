@@ -37,9 +37,9 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
 								<p style=\"font-size: 11px; margin-top: 5px; margin-bottom: 0px; width: 240px;\">
 	<img src=\"/images/icon_public.gif\" style=\"vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;\" alt=\"This photo is public\" width=\"15\" height=\"15\" />This photo is public.
-									(<a href=\"/photo.gne?id=64555\">" . $comment_count . " Comments</a>)
+									(<a href=\"/photo.php?id=".$photo->id . "\">" . $comment_count . " Comments</a>)
 								</p>
-								<p style=\"margin-top: 5px; margin-bottom:10px;\"><span class=\"DateTime\"><a href=\"photo.php?id=". $photo->id . "\" class=\"pale\">" . $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . "</a></span></p>
+								<p style=\"margin-top: 5px; margin-bottom:10px;\"><span class=\"DateTime\"><a href=\"photo.php?id=". $photo->id . "\" class=\"pale\">" . $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "</a></span></p>
 		</td>
 		";
 		$photo_count++;
