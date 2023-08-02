@@ -37,7 +37,7 @@ if($start_from < 0) {
 				foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $uploader);
 				echo "<p class=\"StreamList\">
 				<a href=\"/photo.php?id=" . $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" border=\"0\"></a><br>
-				From <a href=\"/photos.php?user=" . $photo->uploaded_by . "\">" . $uploader->screen_name . "</a>
+				From <a href=\"/profile_photos.php?id=" . $photo->uploaded_by . "\">" . $uploader->screen_name . "</a>
 			</p>";
 			}
 			?>

@@ -26,7 +26,7 @@ $Now = new DateTime($photo->uploaded_on);
 
 // Handle comments
 if(isset($_POST["submit"])) {
-	$comment = $_POST["comment"];
+	$comment = htmlspecialchars($_POST["comment"]);
 	if(mb_strlen($comment, 'utf8') > 200) { die("comment text too long. max length is 200"); }
 	if(mb_strlen($comment, 'utf8') < 1) { die("comment text is non existent"); }
 	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (:posted_to, :posted_by, :text)");
@@ -34,6 +34,7 @@ if(isset($_POST["submit"])) {
 	$stmt->bindParam(":posted_by", $user_id);
 	$stmt->bindParam(":text", $comment);
 	$stmt->execute();
+	header("Location: /photo.php?id=" . $_GET["id"]);
 }
 
 // Update views and get count
@@ -172,7 +173,7 @@ if ($add_view) {
 						<td valign=\"top\"><a href=\"/people/". $comment->posted_by . "/\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
 						<td>
 							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
-							<p>". $comment->text . "<br />
+							<p>". htmlspecialchars($comment->text) . "<br />
 								<span class=\"PostDateTime\">
 									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "
 									|
