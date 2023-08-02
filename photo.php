@@ -28,6 +28,7 @@ $Now = new DateTime($photo->uploaded_on);
 if(isset($_POST["submit"])) {
 	$comment = $_POST["comment"];
 	if(mb_strlen($comment, 'utf8') > 200) { die("comment text too long. max length is 200"); }
+	if(mb_strlen($comment, 'utf8') < 1) { die("comment text is non existent"); }
 	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (:posted_to, :posted_by, :text)");
 	$stmt->bindParam(":posted_to", $_GET["id"]);
 	$stmt->bindParam(":posted_by", $user_id);
@@ -81,7 +82,7 @@ if ($add_view) {
 											</tr>																					
 										</table>
 
-										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="/profile_photos.php?id=<?php echo $photo->uploaded_by; ?>" title="Link to <?php echo $user->screen_name; ?>'s photos"><?php echo $user->screen_name; ?></a> at <a href="#" class="pale"><?php echo $Now->format('h') . "." . $Now->format('m') . "<span style=\"text-transform: lowercase\">" . $Now->format('A') . "</span>"; ?></a></p>
+										<p class="DateTime" style="margin-top: 3px; margin-bottom: 3px;">From <a href="/profile_photos.php?id=<?php echo $photo->uploaded_by; ?>" title="Link to <?php echo $user->screen_name; ?>'s photos"><?php echo $user->screen_name; ?></a> at <a href="#" class="pale"><?php echo $Now->format('h') . "." . $Now->format('i') . "<span style=\"text-transform: lowercase\">" . $Now->format('A') . "</span>"; ?></a></p>
 										<p style="margin-top: 0px;">
 										<span class="DateTime">
 	<img src="/images/icon_public.gif" style="vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;" alt="This photo is public" width="15" height="15" />This photo is public.
@@ -173,7 +174,7 @@ if ($add_view) {
 							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". $comment->text . "<br />
 								<span class=\"PostDateTime\">
-									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('m') . strtolower($Now->format('A')) . "
+									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "
 									|
 									<a href=\"/photo.php?id=" . $_GET["id"] . "#comment" . $comment->id . "\" class=\"PostLinks\">Permalink</a>
 								</span>
