@@ -13,10 +13,13 @@ $database["username"]	= "root";
 $database["password"]	= "";
 $database["name"]		= "flickr";
 // --------------------------------------------------------
-$conn = new mysqli($database["ip_addr"], $database["username"], $database["password"], $database["name"]);
-if ($conn->connect_error) {
-	die("Conn failed. " . $conn->connect_error);
-}
+try {
+	$conn = new PDO("mysql:host=". $database["ip_addr"] . ";dbname=". $database["name"] . "", $database["username"], $database["password"]);
+	// set the PDO error mode to exception
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch(PDOException $e) {
+		echo "Connection failed: " . $e->getMessage();
+	}
 // --------------------------------------------------------
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/functions.php");
 ?>

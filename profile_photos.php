@@ -26,7 +26,10 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 	if($stmt->rowCount() > 0) {
 		foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
 			$Now = new DateTime($photo->uploaded_on);
-			$comment_count = $conn->prepare("SELECT * FROM comments WHERE posted_to = ". $photo->id . "")->rowCount();
+			$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to = :t0");
+			$stmt->bindParam(':t0', $photo->id);
+			$stmt->execute();
+			$comment_count = $stmt->rowCount();
 			if($photo_count == 0) {
 				echo "<tr valign=\"top\">";
 			}
