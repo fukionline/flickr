@@ -14,6 +14,24 @@ $dt = NULL;
 if(isset($_GET["dt"])) { 
 	$dt = (int)$_GET["dt"];
 }
+
+if(!isset($_GET['start'])) {  
+	$start_from = 0;  
+} else {  
+	$start_from = intval($_GET['start']); 
+}
+
+if($start_from < 0) {
+	$start_from = 0;
+}
+
+$limit = 16;
+
+$currentpage = round($start_from/$limit)+1;
+
+$pagecount = 0;
+
+$photolist = array();
 ?>
 
 	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo " ".$user->screen_name; ?>'s photos.</h1>
@@ -26,18 +44,17 @@ if(isset($_GET["dt"])) {
 	$stmt = $conn->prepare("SELECT * FROM photos WHERE uploaded_by=:t0 ORDER by id DESC");
 	$stmt->bindParam(':t0', $_GET['id']);
 	$stmt->execute();
-	$photo_count = 0;
+	$iter = 0;
 	$photo_count_act = 0;
+	$visiblephotocount = 0;
+	
 	if($stmt->rowCount() > 0) {
 		foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
 			$Now = new DateTime($photo->uploaded_on);
-			$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to = :t0");
+			$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to = :t0"); 
 			$stmt->bindParam(':t0', $photo->id);
 			$stmt->execute();
 			$comment_count = $stmt->rowCount();
-			if($photo_count == 0) {
-				echo "<tr valign=\"top\">";
-			}
 			
 			if ($dt != NULL) {
 				$first = strtotime(date('Y/m/01', $dt));
@@ -49,6 +66,23 @@ if(isset($_GET["dt"])) {
 				}
 			}
 			
+			$photolist[$iter] = clone $photo;
+			
+			$photo_count_act++;
+			$visiblephotocount++;
+			$iter++;
+		}
+	}
+	
+	$pagecount = ceil($visiblephotocount/$limit);
+		
+	$photolist = array_slice($photolist, $start_from, $limit);
+
+	$photo_count = 0;
+	foreach ($photolist as $photo) {
+		if($photo_count == 0) {
+			echo "<tr valign=\"top\">";
+		}
 			echo "		<td>
 								<h4 style=\"margin-top: 0px; font-size: 14px; width: 240px;\">" . $photo->title . "</h4>
 								<p style=\"margin-top: 5px; margin-bottom: 5px;\"><a href=\"/photo.php?id=". $photo->id . "\"><img src=\"photos/". $photo->id . ".m.jpg\"></a></p>
@@ -62,13 +96,11 @@ if(isset($_GET["dt"])) {
 		</td>
 		";
 		$photo_count++;
-		$photo_count_act++;
 		if($photo_count == 2) {
 			echo "</tr><tr valign=\"top\">";
 			$photo_count = 0;
 		}
-	}
-	}
+	}	
 	?>
 	</tr>
 </table>
@@ -76,15 +108,29 @@ if(isset($_GET["dt"])) {
 
 							</div>
 							<div class="paginator">
-		<!--
+		
 		Pages:&nbsp;&nbsp;&nbsp;&nbsp;
-			<span class="this-page">1</span>
-			<a href="/photos/underbunny/page2/">2</a>
-			<a href="/photos/underbunny/page3/">3</a>
-			<a href="/photos/underbunny/page4/">4</a>
-			<a href="/photos/underbunny/page5/" class="end">5</a>
-		<span class="DateTime">&nbsp;&nbsp;&nbsp;&nbsp;(46 photos)</span>
-		-->
+		<?php
+			$dtarg = "";
+			if ($dt != NULL) {
+				$dtarg = "&dt=$dt";
+			} 
+			
+			for ($iter = 0 ; $iter < $pagecount; $iter++) {
+				if (($iter+1) == $currentpage) {
+					echo '<span class="this-page">'.($iter+1).'</span>';
+				} else {
+					$st = $iter*$limit;
+					$cstr = "";
+					if ($iter == ($pagecount - 1)) {
+						$cstr = 'class="end"';
+					}
+					echo '<a href="/profile_photos.php?id='.$_GET["id"].$dtarg.'&start='.$st.'" '.$cstr.'>'.($iter+1).'</a>';
+				}
+			}
+		?>
+		<span class="DateTime">&nbsp;&nbsp;&nbsp;&nbsp;(<?php echo $visiblephotocount; ?> photos)</span>
+		
 
 	
 </div>
