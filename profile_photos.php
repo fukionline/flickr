@@ -9,10 +9,14 @@ $stmt->bindParam(':t0', $_GET["id"]);
 $stmt->execute();
 foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
+$dt = NULL;
 
+if(isset($_GET["dt"])) { 
+	$dt = (int)$_GET["dt"];
+}
 ?>
 
-	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo $user->screen_name; ?>'s photos.</h1>
+	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo " ".$user->screen_name; ?>'s photos.</h1>
 					<table width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td width="100%" valign="top">
@@ -23,6 +27,7 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 	$stmt->bindParam(':t0', $_GET['id']);
 	$stmt->execute();
 	$photo_count = 0;
+	$photo_count_act = 0;
 	if($stmt->rowCount() > 0) {
 		foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
 			$Now = new DateTime($photo->uploaded_on);
@@ -33,6 +38,17 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 			if($photo_count == 0) {
 				echo "<tr valign=\"top\">";
 			}
+			
+			if ($dt != NULL) {
+				$first = strtotime(date('Y/m/01', $dt));
+				$last  = strtotime(date('Y/m/t', $dt));
+
+				if (!((strtotime($photo->uploaded_on) >= $first) && (strtotime($photo->uploaded_on) <= $last))) {
+					$photo_count_act++;
+					continue;
+				}
+			}
+			
 			echo "		<td>
 								<h4 style=\"margin-top: 0px; font-size: 14px; width: 240px;\">" . $photo->title . "</h4>
 								<p style=\"margin-top: 5px; margin-bottom: 5px;\"><a href=\"/photo.php?id=". $photo->id . "\"><img src=\"photos/". $photo->id . ".m.jpg\"></a></p>
@@ -46,6 +62,7 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 		</td>
 		";
 		$photo_count++;
+		$photo_count_act++;
 		if($photo_count == 2) {
 			echo "</tr><tr valign=\"top\">";
 			$photo_count = 0;
@@ -76,28 +93,71 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
 				
 						</td>
-						<td style="vertical-align:top;">
-				<!-- <h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/calendar/">Calendar view</a></h3> 
-				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/tags/">underbunny's tags</a></h3>	-->									
+						<td style="vertical-align:top;">	<!--
+				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/calendar/">Calendar view</a></h3> 
+				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/tags/">underbunny's tags</a></h3>						-->			
 				<h3 style="margin-top: 10px;">&raquo; <a href="/profile.php?user=<?php echo $_GET["id"]; ?>">About <?php echo $user->screen_name; ?></a></h3>
 				<br />
-				<!--
+						<!--
 								<h4>Search underbunny's photos</h4>
 				<form action="/photos_search.gne" method="get">
 				<input type="hidden" name="user" value="35034347254@N01">
 				<input type="text" name="q" size="16">&nbsp;<input type="submit" class="SmallButt" value="SEARCH">
 				</form>
-
+		-->
+				
 				<h3>Archive</h3>
 				<p style="margin-left: 10px;">
-					<b>All photos</b> (46)<br>
-					<a href="/photos/underbunny/date/2004/03/">March 2004</a> (3)<br>
-					<a href="/photos/underbunny/date/2004/04/">April 2004</a> (6)<br>
-					<a href="/photos/underbunny/date/2004/05/">May 2004</a> (15)<br>
-					<a href="/photos/underbunny/date/2004/06/">June 2004</a> (15)<br>
-					<a href="/photos/underbunny/date/2004/07/">July 2004</a> (7)<br>
+					<?php
+					if ($dt != NULL) {
+						echo '<a href="/profile_photos.php?id='.$_GET["id"].'">All photos</a> ('.$photo_count_act.')<br>';
+					} else { 
+						echo "<b>All photos</b> ($photo_count_act) <br>";
+					}
+					
+					$stmt = $conn->prepare("SELECT * FROM photos WHERE uploaded_by=:t0 ORDER by uploaded_on ASC");
+					$stmt->bindParam(':t0', $_GET['id']);
+					$stmt->execute();
+					$wantedtimestrcache = NULL;
+					$photomonths = array();
+					$count = 0; 
+					$iter = 0;
+					$itercache = 0;
+					
+					if($stmt->rowCount() > 0) {
+						foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
+							$timestr = strtotime($photo->uploaded_on);
+							$month = date("F",$timestr);
+							$year = date("Y",$timestr);
+							$wantedtimestr = $month . " " . $year;
+							if ($wantedtimestr != $wantedtimestrcache) {
+								$count = 1; 
+								$itercache = $iter;
+								$photomonths[$iter] = array($wantedtimestr, $count);
+							} else {
+								$count++;
+								$photomonths[$itercache] = array($wantedtimestr, $count);
+							}
+							$wantedtimestrcache = $wantedtimestr;
+							$iter++;
+						}
+					}
+					
+					foreach ($photomonths as $photomonth) {
+						$skip = FALSE;
+						if ($dt != NULL) {
+							if (strtotime($photomonth[0]) == $dt) {
+								echo "<b>".$photomonth[0]."</b> (".$photomonth[1].") <br>";
+								$skip = TRUE;
+							}
+						}
+						if ($skip == FALSE) {
+							echo '<a href="/profile_photos.php?id='.$_GET["id"].'&dt='.strtotime($photomonth[0]).'">'.$photomonth[0].'</a> ('.$photomonth[1].')<br>';
+						}
+					}
+					?>
 				</p>
-				
+						<!--
 				<span id="Feeds">
 					<h4>Feeds for this photostream</h4>
 					<p>
@@ -108,7 +168,8 @@ foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 						and <a href="/services/feeds/photos_public.gne?id=35034347254@N01&format=rss_200">2.0</a>)
 					</p>
 				</span>
-				-->
+					-->
+
 				<p style="margin-bottom: 60px;">&nbsp;</p>
 											<img src="/images/spaceball.gif" alt="spacer image" width="200" height="1" style="border: none;"> 
 						</td>
