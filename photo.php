@@ -138,7 +138,7 @@ if ($add_view) {
 						<td>Choose a screen name...</td>
 						</tr>
 						<tr>
-							<td class=\"Or\">(Already a member? <a href=\"/login.php\" title=\"Log in to Flickr\">Log in</a>.)</td>
+							<td class=\"Or\">(Already a member? <a href=\"/login.php\" title=\"Log in to " . $website["instance_name"] . "\">Log in</a>.)</td>
 							<td align=\"center\"><input name=\"username\" type=\"text\" size=\"20\">&nbsp;<a href=\"/register.php\"><input type=\"image\" src=\"/images/button_go_up_small.gif\" style=\"border:none;\" alt=\"Get your screen name!\" align=\"absmiddle\"></a></td>
 						</tr>
 				</table>";

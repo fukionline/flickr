@@ -25,7 +25,7 @@ if($start_from < 0) {
 	$start_from = 0;
 }
 
-$limit = 16;
+$limit = 10;
 
 $currentpage = round($start_from/$limit)+1;
 

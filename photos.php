@@ -4,7 +4,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 if(!isset($_GET['start'])) {  
 	$start_from = 0;  
 } else {  
-	$start_from = $_GET['start'];  
+	$start_from = intval($_GET['start']); 
 }
 
 if($start_from < 0) {

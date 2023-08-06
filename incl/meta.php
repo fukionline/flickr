@@ -6,5 +6,6 @@ if($_SERVER["PHP_SELF"] == "/register.php") { $title = $website["instance_name"]
 if($_SERVER["PHP_SELF"] == "/login.php") { $title = $website["instance_name"] . ": " . "Login"; }
 if($_SERVER["PHP_SELF"] == "/photo.php") { $title = $website["instance_name"] . ": " . "Photo"; }
 if($_SERVER["PHP_SELF"] == "/upload.php") { $title = $website["instance_name"] . ": " . "Upload"; }
+if($_SERVER["PHP_SELF"] == "/iconbuilder.php") { $title = $website["instance_name"] . ": " . "Buddy Icon Builder"; }
 
 ?>
