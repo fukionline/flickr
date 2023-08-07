@@ -65,7 +65,7 @@ $greetings = array(
 		<tr>
 			<td id="Hint"> 
 				<?php if($user->display_picture == "/images/buddyicon.jpg") {
-					echo "<div class=\"StartAlert\">Create yourself a <a href=\"\">buddy icon!</a></div>";
+					echo "<div class=\"StartAlert\">Create yourself a <a href=\"iconbuilder.php\">buddy icon!</a></div>";
 				}
 				?>
 				<h3>Other things to do</h3>

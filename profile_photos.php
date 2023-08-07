@@ -50,11 +50,6 @@ $photolist = array();
 	
 	if($stmt->rowCount() > 0) {
 		foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
-			$Now = new DateTime($photo->uploaded_on);
-			$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to = :t0"); 
-			$stmt->bindParam(':t0', $photo->id);
-			$stmt->execute();
-			$comment_count = $stmt->rowCount();
 			
 			if ($dt != NULL) {
 				$first = strtotime(date('Y/m/01', $dt));
@@ -80,6 +75,11 @@ $photolist = array();
 
 	$photo_count = 0;
 	foreach ($photolist as $photo) {
+		$Now = new DateTime($photo->uploaded_on);
+		$stmt = $conn->prepare("SELECT * FROM comments WHERE posted_to = :t0"); 
+		$stmt->bindParam(':t0', $photo->id);
+		$stmt->execute();
+		$comment_count = $stmt->rowCount();
 		if($photo_count == 0) {
 			echo "<tr valign=\"top\">";
 		}
