@@ -131,10 +131,10 @@ if ($add_view) {
 				<img src="/images/spaceball.gif" alt="spacer image" width="180" height="1" style="border: none;">
 			</td>
 			<td valign="top" width="450"> 
-				<table cellspacing="0" cellpadding="0" class="Tease">
-					<tr>
 					<?php if(!isset($_SESSION["id"])) {
-						echo "<td><span style=\"font-weight: bold; color:#FF6699;\">PSST!</span> Would you like to comment?</td>
+						echo "				<table cellspacing=\"0\" cellpadding=\"0\" class=\"Tease\">
+					<tr>
+						<td><span style=\"font-weight: bold; color:#FF6699;\">PSST!</span> Would you like to comment?</td>
 						<td>Choose a screen name...</td>
 						</tr>
 						<tr>
@@ -143,7 +143,9 @@ if ($add_view) {
 						</tr>
 				</table>";
 					} else {
-						echo "<form method=\"post\">
+						echo "<table cellspacing=\"0\" cellpadding=\"0\">
+					<tr>
+						<form method=\"post\">
 							<td><h3>Add your comment</h3></td>
 						</tr>
 						<tr>
@@ -170,7 +172,7 @@ if ($add_view) {
 							foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $commenter);
 							// Comment html itself
 							echo "<tr>
-						<td valign=\"top\"><a href=\"/people/". $comment->posted_by . "/\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
+						<td valign=\"top\"><a href=\"/profile.php?id=". $comment->posted_by . "\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
 						<td>
 							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". htmlspecialchars($comment->text) . "<br />

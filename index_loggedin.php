@@ -59,7 +59,7 @@ $greetings = array(
 
 ?>
 
-<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"> <?php echo array_rand(array_flip($greetings)); ?></h1>
+<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo array_rand(array_flip($greetings)); ?></h1>
 
 	<table>
 		<tr>
@@ -68,34 +68,53 @@ $greetings = array(
 					echo "<div class=\"StartAlert\">Create yourself a <a href=\"iconbuilder.php\">buddy icon!</a></div>";
 				}
 				?>
-				<h3>Other things to do</h3>
-				<p>
-					&raquo; <a href="profile?user=<?php echo $user_id; ?>">View your own profile</a><br>
-						<p style="background: #ECF1FD; padding: 5px;padding-left: 10px">
-							&raquo; <a href="edit_profile.php">Your profile</a><br>
-							&raquo; <a href="account.php">Your account</a>
-						</p>
-					&raquo; <a href="#">Most popular images</a><br>
-				</p>
+				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your groups</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your contacts</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your profile</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="account.php">Your account</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="#"><?php echo $website["instance_name"]; ?> Mail</a></h3>
 				<img src="/images/spaceball.gif" alt="spacer image" width="220" height="1"> 
 			</td>
 			
 			<td id="GoodStuff" valign="top">
-				<p class="Focus" style="background: #ECF1FD; padding: 5px;padding-left: 10px">&raquo; <a href="upload.php">Upload your photo</a></p>
-				<h3 style="border-bottom: 1px solid #e6e6e6;">Your contacts</h3>
-				<p>You haven't hooked up with any friends on <?php echo $website["instance_name"]; ?> yet.</p>
-				<p>Feel free to introduce yourself to one of the <?php echo $website["instance_name"]; ?> Dev Team. We're here to help!</p>
-				<p>Or, you might like to <a href="#">invite some of your friends</a> to join up too!</p>
+				<div style="background-color: #F0F2FF;padding: 5px; padding-top: 1px">
+					<h3 style="margin-top: 10px;">&raquo; <a href="upload.php">Upload photos</a></h3>
+				</div>
 				
-				<td valign="top">
-					<h3 style="border-bottom: 1px solid #e6e6e6; margin-top: -5px">Your groups</h3>
-					<p>[TO BE ADDED]</p>
-					<img src="/images/spaceball.gif" alt="spacer image" width="180" height="1" style="border: none;">
-				</td>
-				
+				<div>
+					<h3 style="margin-top: 10px; margin-bottom: 10px">&raquo; <a href="#">Your photos</a></h3>
+					<?php
+					$stmt = $conn->prepare("SELECT * from photos WHERE uploaded_by=$user_id ORDER BY id DESC LIMIT 4");
+					$stmt->execute();
+					foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
+						echo "<a href=\"/photo.php?id=". $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" style=\"margin-left: 4px; margin-right: 23px\"></a>";
+					}
+					?>
+				</div>
+
+				<div>	
+					<h3 style="margin-top: 10px; margin-bottom: 10px">&raquo; <a href="/photos.php">Everyone's photos</a></h3>
+					<?php
+					$stmt = $conn->prepare("SELECT * from photos ORDER BY id DESC LIMIT 4");
+					$stmt->execute();
+					foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
+						// Fetch user info
+						$stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
+						$stmt->bindParam(':t0', $photo->uploaded_by);
+						$stmt->execute();
+						foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $uploader);
+						echo "<p class=\"StreamList\">
+						<a href=\"/photo.php?id=" . $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" border=\"0\"></a><br>
+						From <a href=\"/profile_photos.php?id=" . $photo->uploaded_by . "\">". $uploader->screen_name . "</a>
+					</p>";
+					}
+					?>
+				</div>
+			<td>
+			<img src="/images/spaceball.gif" alt="spacer image" width="10" height="1" style="border: none;"> 
+			</td>
 			</td>
 		</tr>
 	</table>
-
 
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

@@ -2,9 +2,12 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/config.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
 
-
 if(isset($_SESSION["id"])) {
 	$user_id = $_SESSION["id"];
+}
+
+if($website["maintenance"] == true) {
+	die(require_once($_SERVER["DOCUMENT_ROOT"] . "/maintenance.php"));
 }
 
 ?>
@@ -87,7 +90,7 @@ function openGame(extra) {
 				echo "				| <a href=\"/\">Home</a> 
 				| <a href=\"/photos.php\">Photos</a> 
 				| <a href=\"/groups.php\">Groups</a> 
-				| <a href=\"/mail.php\">Flickr Mail</a> 
+				| <a href=\"/mail.php\">" . $website["instance_name"] . " Mail</a> 
 				| <a href=\"/invite.php\">Invite</a> 
 				| <a href=\"/contacts.php\">Contacts</a>
 				| <a href=\"/find_people.php\">Find People</a>
@@ -97,7 +100,8 @@ function openGame(extra) {
 			?>
 			</td>
 			<td align="right">
-				<a href="/"><img src="<?php echo $website["instance_logo"]; ?>" alt="Flickr Logo: click to get home" width="106" height="35" style="border: none;"></a>
+				<a href="/"><img src="<?php echo $website["instance_logo"]; ?>" alt="<?php echo $website["instance_name"]; ?> Logo: click to get home" width="106" height="35" style="border: none;"></a>
 			</td>
 		</tr>
 	</table>
+	

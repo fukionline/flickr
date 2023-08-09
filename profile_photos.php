@@ -9,6 +9,12 @@ $stmt->bindParam(':t0', $_GET["id"]);
 $stmt->execute();
 foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
+if(substr($user->screen_name, -1) == "s") { 
+	$sn_display = $user->screen_name . "'"; 
+} else {
+	$sn_display = $user->screen_name . "'s";
+}
+
 $dt = NULL;
 
 if(isset($_GET["dt"])) { 
@@ -34,7 +40,7 @@ $pagecount = 0;
 $photolist = array();
 ?>
 
-	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo " ".$user->screen_name; ?>'s photos.</h1>
+	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo $sn_display; ?> photos.</h1>
 					<table width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td width="100%" valign="top">
@@ -142,7 +148,7 @@ $photolist = array();
 						<td style="vertical-align:top;">	<!--
 				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/calendar/">Calendar view</a></h3> 
 				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/tags/">underbunny's tags</a></h3>						-->			
-				<h3 style="margin-top: 10px;">&raquo; <a href="/profile.php?user=<?php echo $_GET["id"]; ?>">About <?php echo $user->screen_name; ?></a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="/profile.php?id=<?php echo $_GET["id"]; ?>">About <?php echo $user->screen_name; ?></a></h3>
 				<br />
 						<!--
 								<h4>Search underbunny's photos</h4>
