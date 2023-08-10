@@ -87,7 +87,7 @@ $greetings = array(
 					$stmt = $conn->prepare("SELECT * from photos WHERE uploaded_by=$user_id ORDER BY id DESC LIMIT 4");
 					$stmt->execute();
 					foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
-						echo "<a href=\"/photo.php?id=". $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" style=\"margin-left: 4px; margin-right: 23px\"></a>";
+						echo "<a href=\"/photo.php?id=". $photo->id . "\"><img src=\"/photos/" . $photo->id . ".t.jpg\" style=\"margin-left: 4px; margin-right: 14px\"></a>";
 					}
 					?>
 				</div>
