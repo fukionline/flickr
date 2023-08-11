@@ -14,7 +14,9 @@ if(isset($_POST["Submit"])) {
 	if(empty($email)) { die(header("Location: /register.php?err=2")); }
 	if(empty($password)) { die(header("Location: /register.php?err=2")); }
 	// ----------------------
-	$password = sha1($password.$website["sha1_salt"]); // My dumbass doesn't know how but BCRYPT doesn't work. Sorry!
+	$password = password_hash($password, PASSWORD_BCRYPT);
+	$password = "BCrypt".$password;
+	
 	// ----------------------
 	// And now, the actual signup
 	$result = $conn->query("SELECT email FROM users WHERE email = '$email'");
