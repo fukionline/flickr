@@ -22,10 +22,11 @@ if(isset($_POST["Submit"])) {
 			$isBanned = $row["isBanned"];
 			$screen_name = $row["screen_name"];
 		}
-		
-		if($password == $password_db and $isBanned == 1) {
-			die("This account has been suspended.");
-		} else {
+		if($password == $password_db) {
+		}
+			if($isBanned == 1) {
+				die("This account has been suspended.");
+			}
 			$_SESSION["id"] = $id;
 			$_SESSION["email"] = $email;
 			$_SESSION["screen_name"] = $screen_name;
@@ -36,12 +37,11 @@ if(isset($_POST["Submit"])) {
 			$stmt->bindParam(":email", $email);
 			$stmt->execute();
 			header("Location: /");
-		}
 		} else {
 			die("user does not exist");
 		}
-		$conn->close();
-	}
+}
+		
 	
 ?>
 

@@ -15,6 +15,24 @@ if(substr($user->screen_name, -1) == "s") {
 	$sn_display = $user->screen_name . "'s";
 }
 
+if(isset($_GET["delete"])) {
+	$_GET["delete"] = intval($_GET['delete']);
+	// TODO: make this stuff a whole load better
+	$stmt = $conn->prepare("SELECT * FROM photos WHERE id=:t0");
+	$stmt->bindParam(':t0', $_GET["delete"]);
+	$stmt->execute();
+	foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo);
+	if($_SESSION["id"] == $photo->uploaded_by) {
+		$stmt = $conn->prepare("DELETE FROM photos WHERE id=:t0");
+		$stmt->bindParam(':t0', $_GET["delete"]);
+		$stmt->execute();
+		unlink("/photos/" . $_GET["delete"] . ".jpg");
+		unlink("/photos/" . $_GET["delete"] . ".full.jpg");
+		unlink("/photos/" . $_GET["delete"] . ".m.jpg");
+		unlink("/photos/" . $_GET["delete"] . ".t.jpg");
+	}
+}
+
 $dt = NULL;
 
 if(isset($_GET["dt"])) { 
@@ -38,9 +56,15 @@ $currentpage = round($start_from/$limit)+1;
 $pagecount = 0;
 
 $photolist = array();
+
 ?>
 
 	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo $sn_display; ?> photos.</h1>
+	<?php if($user->isBanned == 1) {
+			echo "<p class=\"Problem\" style=\"margin-top: 30px; margin-left: 60px;\">This person is no longer active on " . $website["instance_name"] . "</p>";
+			die(require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"));
+	}
+	?>
 					<table width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td width="100%" valign="top">
@@ -86,6 +110,7 @@ $photolist = array();
 		$stmt->bindParam(':t0', $photo->id);
 		$stmt->execute();
 		$comment_count = $stmt->rowCount();
+		if($user_id == $photo->uploaded_by) { $delete = " | <a href=\"/profile_photos.php?id=". $_GET["id"] . "&delete=" . $photo->id . "\">Delete</a>"; } else { $delete = NULL; }
 		if($photo_count == 0) {
 			echo "<tr valign=\"top\">";
 		}
@@ -98,7 +123,7 @@ $photolist = array();
 	<img src=\"/images/icon_public.gif\" style=\"vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;\" alt=\"This photo is public\" width=\"15\" height=\"15\" />This photo is public.
 									(<a href=\"/photo.php?id=".$photo->id . "\">" . $comment_count . " Comments</a>)
 								</p>
-								<p style=\"margin-top: 5px; margin-bottom:10px;\"><span class=\"DateTime\"><a href=\"photo.php?id=". $photo->id . "\" class=\"pale\">" . $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "</a></span></p>
+								<p style=\"margin-top: 5px; margin-bottom:10px;\"><span class=\"DateTime\"><a href=\"photo.php?id=". $photo->id . "\" class=\"pale\">" . $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "</a>" . $delete . "</span></p>
 		</td>
 		";
 		$photo_count++;

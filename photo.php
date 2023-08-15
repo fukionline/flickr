@@ -37,6 +37,25 @@ if(isset($_POST["submit"])) {
 	header("Location: /photo.php?id=" . $_GET["id"]);
 }
 
+// Comment deletion
+if(isset($_GET["delcomm"])) {
+	$_GET["delcomm"] = intval($_GET['delcomm']);
+	// TODO: make this stuff a whole load better
+	$stmt = $conn->prepare("SELECT * FROM comments WHERE id=:t0");
+	$stmt->bindParam(':t0', $_GET["delcomm"]);
+	$stmt->execute();
+	foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $comment);
+	if($_SESSION["id"] == $comment->posted_by) {
+		$stmt = $conn->prepare("DELETE FROM comments WHERE id=:t0");
+		$stmt->bindParam(':t0', $_GET["delcomm"]);
+		$stmt->execute();
+	} else if($_SESSION["id"] == $photo->uploaded_by) {
+		$stmt = $conn->prepare("DELETE FROM comments WHERE id=:t0");
+		$stmt->bindParam(':t0', $_GET["delcomm"]);
+		$stmt->execute();	
+	}
+}
+
 // Update views and get count
 $stmt = $conn->prepare("SELECT * FROM photo_views WHERE id=:t0");
 $stmt->bindParam(':t0', $_GET['id']);
@@ -170,6 +189,14 @@ if ($add_view) {
 							$stmt->bindParam(':t0', $comment->posted_by);
 							$stmt->execute();
 							foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $commenter);
+							//HACKY SHIT: Delete comment
+							if($_SESSION["id"] == $comment->posted_by) {
+								$options = "| <a href=\"/photo.php?id=" . $_GET["id"] . "&delcomm=" . $comment->id . "\" class=\"PostLinks\">Delete</a>";
+							} else if($_SESSION["id"] == $photo->uploaded_by) {
+								$options = "| <a href=\"/photo.php?id=" . $_GET["id"] . "&delcomm=" . $comment->id . "\" class=\"PostLinks\">Delete</a>";
+							} else {
+								$options = NULL;
+							}
 							// Comment html itself
 							echo "<tr>
 						<td valign=\"top\"><a href=\"/profile.php?id=". $comment->posted_by . "\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
@@ -179,7 +206,7 @@ if ($add_view) {
 								<span class=\"PostDateTime\">
 									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "
 									|
-									<a href=\"/photo.php?id=" . $_GET["id"] . "#comment" . $comment->id . "\" class=\"PostLinks\">Permalink</a>
+									<a href=\"/photo.php?id=" . $_GET["id"] . "#comment" . $comment->id . "\" class=\"PostLinks\">Permalink</a> " . $options . "
 								</span>
 							</p>
 						</td>

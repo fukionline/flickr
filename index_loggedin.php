@@ -82,7 +82,7 @@ $greetings = array(
 				</div>
 				
 				<div>
-					<h3 style="margin-top: 10px; margin-bottom: 10px">&raquo; <a href="#">Your photos</a></h3>
+					<h3 style="margin-top: 10px; margin-bottom: 10px">&raquo; <a href="profile_photos.php?id=<?php echo $user_id; ?>">Your photos</a></h3>
 					<?php
 					$stmt = $conn->prepare("SELECT * from photos WHERE uploaded_by=$user_id ORDER BY id DESC LIMIT 4");
 					$stmt->execute();

@@ -16,11 +16,15 @@ if(substr($user->screen_name, -1) == "s") {
 } else {
 	$sn_display = $user->screen_name . "'s";
 }
-
+$Now = new DateTime($user->last_login);
 ?>
 
-	<h1><img src="<?php echo $user->display_picture; ?>" alt="buddy icon" width="48" height="48" border="0" align="absmiddle" class="xBuddyIconH"> <?php echo $user->screen_name; ?></h1>
-
+	<h1><img src="<?php echo $user->display_picture; ?>" alt="buddy icon" width="48" height="48" border="0" align="absmiddle" class="xBuddyIconH"><?php echo $user->screen_name; ?></h1>
+	<?php if($user->isBanned == 1) {
+			echo "<p class=\"Problem\" style=\"margin-top: 30px; margin-left: 60px;\">This person is no longer active on " . $website["instance_name"] . "</p>";
+			die(require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"));
+	}
+	?>
 	<table>
 		<tr>
 			<td id="Hint">			
@@ -47,12 +51,15 @@ if(substr($user->screen_name, -1) == "s") {
 			<img src="/images/spaceball.gif" alt="spacer image" width="160" height="1">
 			</td>
 			<td id="GoodStuff">
-			
+			<?php if(isset($user->about)) {
+				echo "<p>" . $user->about . "</p>";
+			}
+			?>
 			<!-- <p>I'm <strong>Other</strong>.</p> -->
 			
 			<p>
 					<span class="NotLoggedIn"><?php echo $user->screen_name; ?> is not in <?php echo $website["instance_name"]; ?>Live right now.</span><br />
-				<!-- <span class="DateTime">(Last recorded sighting: </span> (TODO: Fix this shit, php doesnt like me calling the date.) -->
+					<span class="DateTime">(Last recorded sighting: <?php echo ordinal($Now->format("d")) . " " . $Now->format("F Y"); ?>)</span> 
 			</p>
 							
 			</p>

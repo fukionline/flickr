@@ -3,7 +3,7 @@ session_start();
 $website = array();
 $database = array();
 // --------------------------------------------------------
-$website["sha1_salt"]	  = "thegmaniswatching";
+$website["sha1_salt"]	  = "thegmaniswatching"; // For legacy purposes
 $website["instance_name"] = "Snippr";
 $website["instance_logo"] = "/images/snippr_logo_beta.png";
 
@@ -13,7 +13,6 @@ if(isset($_COOKIE["alt_branding"])) {
 }
 
 $website["allowed_filetypes"] = array("png", "jpg", "bmp", "tga");
-$website["developer_team"] = array(1, 2); // A list of developers to put on the logged in homepage -- NOT DONE YET
 $website["maintenance"] = false;
 // --------------------------------------------------------
 $database["ip_addr"]	= "127.0.0.1";
