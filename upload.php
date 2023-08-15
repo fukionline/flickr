@@ -10,13 +10,13 @@ if(isset($_POST["Submit"])) {
 	if(mb_strlen($title, 'utf8') > 60) { die("photo title too long"); }
 	if(mb_strlen($title, 'utf8') < 1) { die("photo title cannot be empty"); }
 	if(mb_strlen($description, 'utf8') > 200) { die("description is too long"); }
-	if(substr_count($tags, ' ') > 10) { die("too much tags"); }
+	if(mb_strlen($tags, 'utf8') > 400) { die("too many tags"); }
 	if(!isset($_FILES["file"])) {
 		die("no file");
 	}
 	// ----------------------------------------------------------------------
 	$upload_extension   =  strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
-	$photo_id 			= getNextID("SELECT * FROM photos", "id");
+	$photo_id 			= getNextID("SELECT last_insert_id() FROM photos", "id");
 	$upload_tgt_preload = "photos/$photo_id.full.$upload_extension";
 	$input 				= $upload_tgt_preload;
 	$name      			= $_FILES['file']['name']; 
