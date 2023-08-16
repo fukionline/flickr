@@ -11,7 +11,6 @@ if(isset($_POST["Submit"])) {
 	if(empty($_POST["password"])) { die("you did not input a password"); }
 	
 	$email = $_POST["email"];
-	$password = sha1($_POST["password"].$website["sha1_salt"]);
 	
 	$sql = "SELECT * FROM users WHERE email='$email'";
 	$result = $conn->query($sql);
@@ -22,8 +21,20 @@ if(isset($_POST["Submit"])) {
 			$isBanned = $row["isBanned"];
 			$screen_name = $row["screen_name"];
 		}
-		if($password == $password_db) {
+		
+		$password_ok = false;
+		
+		if (strpos($password_db, 'BCrypt') === 0) {
+			if (password_verify($_POST["password"], $password_db)) {
+				$password_ok = true;
+			} 
+		} else {
+			if ($password_db == sha1($_POST["password"].$website["sha1_salt"])) {
+				$password_ok = true;	
+			}
 		}
+		
+		if($password_ok) {
 			if($isBanned == 1) {
 				die("This account has been suspended.");
 			}
@@ -40,6 +51,7 @@ if(isset($_POST["Submit"])) {
 		} else {
 			die("user does not exist");
 		}
+	}
 }
 		
 	

@@ -83,6 +83,15 @@ function imgGetCamera($photo) {
     return $return;
 }
 
+function getNextIDNew($tablename) {
+	global $conn;
+
+	$asd = $conn->query("SHOW TABLE STATUS LIKE '$tablename'");
+	while($row = $asd->fetch()) {
+		return $row["Auto_increment"];
+	}
+}
+
 function getNextID($sql, $rowname) {
 	global $conn;
 	$i = 1;

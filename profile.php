@@ -51,9 +51,9 @@ $Now = new DateTime($user->last_login);
 			<img src="/images/spaceball.gif" alt="spacer image" width="160" height="1">
 			</td>
 			<td id="GoodStuff">
-			<?php if(isset($user->about)) {
+			<?php /* if(isset($user->about)) {
 				echo "<p>" . $user->about . "</p>";
-			}
+			} */
 			?>
 			<!-- <p>I'm <strong>Other</strong>.</p> -->
 			

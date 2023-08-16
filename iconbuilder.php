@@ -57,6 +57,14 @@ if(isset($_POST["upload"])) {
 	header("Location: /iconbuilder.php?success");
 }
 
+if(isset($_POST["del"])) {
+	$final = "/images/buddyicon.jpg";
+	$stmt = $conn->prepare("UPDATE users SET display_picture=:pic WHERE id=$user_id");
+	$stmt->bindParam(":pic", $final);
+	$stmt->execute();
+	header("Location: /iconbuilder.php?success");
+}
+
 ?>
 <h1><a href="#" style="text-decoration: none">Edit your profile</a> / <a href="/iconbuilder.php" style="text-decoration: none">Your buddy icon</a></h1>
 
@@ -72,7 +80,17 @@ if(isset($_POST["upload"])) {
 			</td>
 			
 			<td id="GoodStuff" valign="top">
-				We've got an "Icon Builder" to help you if you need it. It's a <b>tool</b> which allows you to choose an image, load it into the builder and then crop or resize an area of that image to publish as your icon.</p>
+			<?php if($user->display_picture !== "/images/buddyicon.jpg") {
+				echo "				<div class=\"CurrentIcon\">
+					<img src=\"" . $user->display_picture . "\"><span style=\"margin-left: 5px;font-size: 19px;margin-bottom: 10px\">This is your buddy icon at the moment.</span><br>
+					<form method=\"post\">
+						<input type=\"submit\" name=\"del\" value=\"DELETE\" style=\"margin-left: 5px;margin-bottom: 10px\"><br>
+					</form>
+				</div>";
+			} else {
+				echo "We've got an \"Icon Builder\" to help you if you need it. It's a <b>tool</b> which allows you to choose an image, load it into the builder and then crop or resize an area of that image to publish as your icon.</p>";
+			}
+			?>
 				<h3>Where's the image you want to use?</h3>
 				<table>
 					<tr>

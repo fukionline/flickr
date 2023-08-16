@@ -26,10 +26,6 @@ if(isset($_GET["delete"])) {
 		$stmt = $conn->prepare("DELETE FROM photos WHERE id=:t0");
 		$stmt->bindParam(':t0', $_GET["delete"]);
 		$stmt->execute();
-		unlink("/photos/" . $_GET["delete"] . ".jpg");
-		unlink("/photos/" . $_GET["delete"] . ".full.jpg");
-		unlink("/photos/" . $_GET["delete"] . ".m.jpg");
-		unlink("/photos/" . $_GET["delete"] . ".t.jpg");
 	}
 }
 
@@ -57,9 +53,15 @@ $pagecount = 0;
 
 $photolist = array();
 
-?>
+if($_SESSION["id"] == $_GET["id"]) {
+	echo "<h1><img src=\"" . $user->display_picture . "\" width=\"48\" height=\"48\" border=\"0\" align=\"absmiddle\" class=\"BuddyIconH\">Your photos</h1>";
+} else {
+	echo "<h1><img src=\"" . $user->display_picture . "\" width=\"48\" height=\"48\" border=\"0\" align=\"absmiddle\" class=\"BuddyIconH\">". $sn_display . " photos.</h1>";
+}
 
-	<h1><img src="<?php echo $user->display_picture; ?>" width="48" height="48" border="0" align="absmiddle" class="BuddyIconH"><?php echo $sn_display; ?> photos.</h1>
+?>
+	
+	
 	<?php if($user->isBanned == 1) {
 			echo "<p class=\"Problem\" style=\"margin-top: 30px; margin-left: 60px;\">This person is no longer active on " . $website["instance_name"] . "</p>";
 			die(require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"));
@@ -170,22 +172,35 @@ $photolist = array();
 
 				
 						</td>
-						<td style="vertical-align:top;">	<!--
-				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/calendar/">Calendar view</a></h3> 
-				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/tags/">underbunny's tags</a></h3>						-->			
-				<h3 style="margin-top: 10px;">&raquo; <a href="/profile.php?id=<?php echo $_GET["id"]; ?>">About <?php echo $user->screen_name; ?></a></h3>
+						<td style="vertical-align:top;">
+				<!--
+				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/calendar/">Calendar view</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="/photos/underbunny/tags/">underbunny's tags</a></h3>
+				-->
+				<?php
+				if($_SESSION["id"] == $_GET["id"]) {
+					echo "<h3 style=\"margin-top: 10px;\">&raquo; <a href=\"/upload.php\">Upload</a></h3>
+					<h3 style=\"margin-top: 10px;\">&raquo; <a href=\"/profile.php?id=" . $_GET["id"] . "\">Your profile</a></h3>";
+				} else {
+					echo "<h3 style=\"margin-top: 10px;\">&raquo; <a href=\"/profile.php?id=" . $_GET["id"] . "\">About ". $user->screen_name . "</a></h3>";
+				}
+				?>
+				
 				<br />
-						<!--
-								<h4>Search underbunny's photos</h4>
+				<!--
+				<h4>Search underbunny's photos</h4>
 				<form action="/photos_search.gne" method="get">
 				<input type="hidden" name="user" value="35034347254@N01">
 				<input type="text" name="q" size="16">&nbsp;<input type="submit" class="SmallButt" value="SEARCH">
 				</form>
-		-->
-				
-				<h3>Archive</h3>
-				<p style="margin-left: 10px;">
-					<?php
+				-->
+				<?php if($_SESSION["id"] == $_GET["id"]) {
+					echo "<p><b>Share your photos</b></p>
+					<p>Did you know you can publish your photos on another website with a <a href=\"/badge.php\">". $website["instance_name"] . " badge</a>?</p>";
+				} else {
+					echo "<h3>Archive</h3>
+				<p style=\"margin-left: 10px;\">";
+
 					if ($dt != NULL) {
 						echo '<a href="/profile_photos.php?id='.$_GET["id"].'">All photos</a> ('.$photo_count_act.')<br>';
 					} else { 
@@ -232,6 +247,7 @@ $photolist = array();
 							echo '<a href="/profile_photos.php?id='.$_GET["id"].'&dt='.strtotime($photomonth[0]).'">'.$photomonth[0].'</a> ('.$photomonth[1].')<br>';
 						}
 					}
+				}
 					?>
 				</p>
 						<!--

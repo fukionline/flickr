@@ -70,17 +70,15 @@ $greetings = array(
 				?>
 				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your groups</a></h3>
 				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your contacts</a></h3>
-				<h3 style="margin-top: 10px;">&raquo; <a href="#">Your profile</a></h3>
+				<h3 style="margin-top: 10px;">&raquo; <a href="profile.php?id=<?php echo $user_id; ?>">Your profile</a></h3>
 				<h3 style="margin-top: 10px;">&raquo; <a href="account.php">Your account</a></h3>
 				<h3 style="margin-top: 10px;">&raquo; <a href="#"><?php echo $website["instance_name"]; ?> Mail</a></h3>
 				<img src="/images/spaceball.gif" alt="spacer image" width="220" height="1"> 
 			</td>
 			
 			<td id="GoodStuff" valign="top">
-				<div style="background-color: #F0F2FF;padding: 5px; padding-top: 1px">
-					<h3 style="margin-top: 10px;">&raquo; <a href="upload.php">Upload photos</a></h3>
-				</div>
-				
+			<h3 style="margin-top: 10px;">&raquo; <a href="upload.php">Upload photos</a></h3>
+			
 				<div>
 					<h3 style="margin-top: 10px; margin-bottom: 10px">&raquo; <a href="profile_photos.php?id=<?php echo $user_id; ?>">Your photos</a></h3>
 					<?php
