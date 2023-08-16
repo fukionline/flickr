@@ -4,6 +4,9 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/meta.php");
 
 if(isset($_SESSION["id"])) {
 	$user_id = $_SESSION["id"];
+} else {
+	$user_id = NULL;
+	$_SESSION["id"] = NULL;
 }
 
 if($website["maintenance"] == true) {
