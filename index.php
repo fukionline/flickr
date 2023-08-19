@@ -1,9 +1,8 @@
-<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); ?>
-<p>Until theres a proper index, just use this.</p>
-<ul>
-	<li><a href="/photos.php">Everyone's photos</a></li>
-	<li><a href="/login.php">Log in</a></li>
-	<li><a href="/register.php">Sign up</a></li>
-	<li><a href="/upload.php">Upload</a></li>
-</ul>
-<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/config.php");
+if(!isset($_SESSION["id"])) {
+	require_once($_SERVER["DOCUMENT_ROOT"] . "/index_nosession.php");
+} else {
+	require_once($_SERVER["DOCUMENT_ROOT"] . "/index_loggedin.php");
+}
+?>

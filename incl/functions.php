@@ -83,6 +83,15 @@ function imgGetCamera($photo) {
     return $return;
 }
 
+function getNextIDNew($tablename) {
+	global $conn;
+
+	$asd = $conn->query("SHOW TABLE STATUS LIKE '$tablename'");
+	while($row = $asd->fetch()) {
+		return $row["Auto_increment"];
+	}
+}
+
 function getNextID($sql, $rowname) {
 	global $conn;
 	$i = 1;
@@ -95,6 +104,44 @@ function getNextID($sql, $rowname) {
 		}
 	}
 	return $i;
+}
+
+function getIP()
+{
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+              $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+              $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if(filter_var($client, FILTER_VALIDATE_IP))
+    {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    {
+        $ip = $forward;
+    }
+    else
+    {
+        $ip = $remote;
+    }
+
+    return $ip;
+}
+
+function make_links_clickable($text){
+	return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
+}
+
+function ordinal($number) {
+    $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+    if ((($number % 100) >= 11) && (($number%100) <= 13))
+        return $number. 'th';
+    else
+        return $number. $ends[$number % 10];
 }
 
 ?>
