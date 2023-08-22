@@ -112,6 +112,11 @@ if($_SESSION["id"] == $_GET["id"]) {
 		$stmt->bindParam(':t0', $photo->id);
 		$stmt->execute();
 		$comment_count = $stmt->rowCount();
+		if($comment_count == 1) {
+			$comment_display = $comment_count . " Comment";
+		} else {
+			$comment_display = $comment_count . " Comments";
+			}
 		if($user_id == $photo->uploaded_by) { $delete = " | <a href=\"/profile_photos.php?id=". $_GET["id"] . "&delete=" . $photo->id . "\">Delete</a>"; } else { $delete = NULL; }
 		if($photo_count == 0) {
 			echo "<tr valign=\"top\">";
@@ -123,7 +128,7 @@ if($_SESSION["id"] == $_GET["id"]) {
 
 								<p style=\"font-size: 11px; margin-top: 5px; margin-bottom: 0px; width: 240px;\">
 	<img src=\"/images/icon_public.gif\" style=\"vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;\" alt=\"This photo is public\" width=\"15\" height=\"15\" />This photo is public.
-									(<a href=\"/photo.php?id=".$photo->id . "\">" . $comment_count . " Comments</a>)
+									(<a href=\"/photo.php?id=".$photo->id . "\">" . $comment_display . "</a>)
 								</p>
 								<p style=\"margin-top: 5px; margin-bottom:10px;\"><span class=\"DateTime\"><a href=\"photo.php?id=". $photo->id . "\" class=\"pale\">" . $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "</a>" . $delete . "</span></p>
 		</td>

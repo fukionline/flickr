@@ -57,13 +57,18 @@ function EditDesc(){
 					$stmt->bindParam(':t0', $photo->id);
 					$stmt->execute();
 					$comment_count = $stmt->rowCount();
+					if($comment_count == 1) {
+						$comment_display = $comment_count . " Comment";
+					} else {
+						$comment_display = $comment_count . " Comments";
+					}
 					echo "				<p class=\"StreamList\">
 					<a href=\"/photo.php?id=" . $photo->id . "\"><img src=\"/photos/". $photo->id . ".t.jpg\" alt=\"". $photo->title  . "\" /></a>";
 					if(isset($photo->description)) {
 						echo "<br \>" . $photo->description;
 					}
 					echo "<br />
-					<a href=\"/photo.php?id=". $photo->id . "\">" . $comment_count . " comments</a>
+					<a href=\"/photo.php?id=". $photo->id . "\">" . $comment_display . "</a>
 				</p>";
 				}
 			}

@@ -1,7 +1,7 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
 
-$stmt = $conn->query("SELECT tags FROM photos");
+$stmt = $conn->query("SELECT tags FROM photos ORDER BY tags ASC");
 $stmt->execute();
 $tag_list = [];
 foreach($stmt as $result) $tag_list = array_merge($tag_list, explode(" ", $result['tags']));
@@ -28,7 +28,10 @@ $tag_list = array_slice(array_count_values($tag_list), 0, 150);
 							<?php
 							foreach($tag_list as $tag => $frequency	) {
 								if($frequency <= 11) { 
-									$frequency = 11;
+									$frequency = $frequency + 10;
+								}
+								if($frequency >= 36) {
+									$frequency = 36;
 								}
 								echo "&nbsp;<a href=\"/photos/tags/" . $tag . "/\" style=\"font-size: " . $frequency . "px;\" class=\"PopularTag\">". $tag . "</a>&nbsp;
 								";
