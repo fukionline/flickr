@@ -7,5 +7,6 @@ if($_SERVER["PHP_SELF"] == "/login.php") { $title = $website["instance_name"] . 
 if($_SERVER["PHP_SELF"] == "/photo.php") { $title = $website["instance_name"] . ": " . "Photo"; }
 if($_SERVER["PHP_SELF"] == "/upload.php") { $title = $website["instance_name"] . ": " . "Upload"; }
 if($_SERVER["PHP_SELF"] == "/iconbuilder.php") { $title = $website["instance_name"] . ": " . "Buddy Icon Builder"; }
-
+if($_SERVER["PHP_SELF"] == "/tags.php") { $title = $website["instance_name"] . ": " . "Photo Tags"; }
+if($_SERVER["PHP_SELF"] == "/gallery_view.php") { $title = $website["instance_name"] . ": " . "View Gallery"; }
 ?>

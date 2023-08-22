@@ -1,0 +1,174 @@
+/* CSS Document */
+
+
+
+body {
+	background: url(/images/bg.gif) repeat;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+p {
+	font: 12px Arial, Helvetica, sans-serif;
+}
+
+h1 {
+	font: normal 32px Arial, Helvetica, sans-serif;
+	color: #000000;
+	margin-top: 0px;
+}
+
+.RealName {
+	font-size: 75%;
+	color: #333333;
+}
+
+h2 {
+	font: lighter 26px Arial, Helvetica, sans-serif;
+	color: #000000;
+	margin-top: 5px;
+}
+
+h3 {
+	font-size: 20px;
+	color: #FF0084;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	border-bottom-width: 1px;
+	border-bottom-style: dotted;
+	border-bottom-color: #FFE1F1;
+	padding-bottom: 5px;
+}
+
+h4 {
+	font: bold 13px Verdana, Arial, Helvetica, sans-serif;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+h5 {
+	font: bold 11px Arial, Helvetica, sans-serif;
+	color: #333333;
+}
+
+table {
+	border: none;
+	font-size: 11px;
+}
+
+td {
+	padding: 5px;
+	font: 12px Arial, Helvetica, sans-serif;
+} 
+
+img {
+	border: 1px solid #000000;
+}
+
+ol, ul {
+	margin-top: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+#Main {
+	margin-right: auto;
+	margin-left: auto;
+	background: #FFFFFF;
+	width: 80%;
+	border-top: 1px solid #999999;
+	border-right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #999999;
+	text-align: left;
+	padding: 15px;
+	vertical-align: top;
+}
+
+.Butt {
+	font: bold 11px Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	color: #FFFFFF;
+	background: #0063DC;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #7CBAFF;
+	border-right-color: #2854A7;
+	border-bottom-color: #2854A7;
+	border-left-color: #7CBAFF;
+}
+
+.DeleteButt {
+	text-transform: uppercase;
+	color: #000000;
+	background: #DCE0E6;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #F5F6F7;
+	border-right-color: #BFB7BC;
+	border-bottom-color: #BFB7BC;
+	border-left-color: #F5F6F7;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+a:link {
+	color: #0063DC;
+	text-decoration: underline;
+}
+
+a:visited {
+	color: #0259C4;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #FFFFFF;
+	text-decoration: none;
+	background: #0063DC;
+}
+
+a:active {
+	color: #FFFFFF;
+	text-decoration: none;
+	background: #0259C4;
+}
+
+#InBox table {
+	background: #FFFFFF;
+	font: 11px Verdana, Arial, Helvetica, sans-serif;
+}
+
+#InBox td {
+	font-size: 11px;
+	border-bottom: 1px solid #eeeeee;
+	background: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+#InBox h4 {
+	font: bold 11px Arial, Helvetica, sans-serif;
+	margin-top: 5px;
+	margin-bottom: 0px;
+}
+
+.Ludi {
+	padding-top: 25px;
+	font: 11px Arial, Helvetica, sans-serif;
+}

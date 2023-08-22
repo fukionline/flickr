@@ -106,3 +106,5 @@ function set_username(username){
 document.getElementById('username_field').focus();
 //-->
 </script>
+
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

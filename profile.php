@@ -46,14 +46,22 @@ $Now = new DateTime($user->last_login);
 		</table>
 	</form>";
 			}
-			?>
 			
+			$stmt = $conn->prepare("SELECT * FROM photos WHERE uploaded_by=:t0 ORDER by id DESC LIMIT 1");
+			$stmt->bindParam(':t0', $_GET['id']);
+			$stmt->execute();
+			if($stmt->rowCount() > 0) {
+				foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $photo) {
+					echo "<div class=\"ToDoProfile\" style=\"text-align: center;\"><a href=\"/gallery_view.php?id=" . $_GET["id"] . "\"><img src=\"/photos/". $photo->id . ".t.jpg\" alt=\"Click to view gallery\" style=\"margin-bottom:10px; border: solid 1px #000000\"><br /><strong>View Gallery</strong></a></div>";
+				}
+			}
+			?>
 			<img src="/images/spaceball.gif" alt="spacer image" width="160" height="1">
 			</td>
 			<td id="GoodStuff">
-			<?php /* if(isset($user->about)) {
+			<?php if(isset($user->about)) {
 				echo "<p>" . $user->about . "</p>";
-			} */
+			}
 			?>
 			<!-- <p>I'm <strong>Other</strong>.</p> -->
 			
