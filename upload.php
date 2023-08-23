@@ -3,9 +3,9 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/logincheck.php"); 
 
 if(isset($_POST["Submit"])) {
-	$title = htmlspecialchars($_POST["title"]);
-	$description = htmlspecialchars($_POST["description"]);
-	$tags = htmlspecialchars($_POST["tags"]);
+	$title = $_POST["title"];
+	$description = $_POST["description"];
+	$tags = $_POST["tags"];
 	// ----------------------------------------------------------------------
 	if(mb_strlen($title, 'utf8') > 60) { die("photo title too long"); }
 	if(mb_strlen($title, 'utf8') < 1) { die("photo title cannot be empty"); }

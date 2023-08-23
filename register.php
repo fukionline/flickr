@@ -16,7 +16,6 @@ if(isset($_POST["Submit"])) {
 	// ----------------------
 	$password = password_hash($password, PASSWORD_BCRYPT);
 	$password = "BCrypt".$password;
-	
 	// ----------------------
 	// And now, the actual signup
 	$result = $conn->query("SELECT email FROM users WHERE email = '$email'");
@@ -82,10 +81,12 @@ function set_username(username){
 						<td class="Label">Password:</td>
 						<td><input type="password" name="password" value=""></td>
 					</tr>
+					<!--
 					<tr>
 						<td>&nbsp;</td>
 						<td><input type="checkbox" name="terms" value="1"> I am over 13 years old, and have read the fascinating <a href="/terms.php" onClick="window.open('/terms.php','TOC','status=yes,scrollbars=yes,resizable=yes,width=600,height=480'); return false;">Terms of Use</a>.</td>
 					</tr>
+					-->
 					<tr>
 						<td>&nbsp;</td>
 						<td><input name="Submit" type="submit" class="Butt" value="SIGN UP"></td>

@@ -10,9 +10,9 @@ $stmt->execute();
 foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
 if(substr($user->screen_name, -1) == "s") { 
-	$sn_display = $user->screen_name . "'"; 
+	$sn_display = htmlspecialchars($user->screen_name) . "'"; 
 } else {
-	$sn_display = $user->screen_name . "'s";
+	$sn_display = htmlspecialchars($user->screen_name) . "'s";
 }
 
 if(isset($_GET["delete"])) {
@@ -122,9 +122,9 @@ if($_SESSION["id"] == $_GET["id"]) {
 			echo "<tr valign=\"top\">";
 		}
 			echo "		<td>
-								<h4 style=\"margin-top: 0px; font-size: 14px; width: 240px;\">" . $photo->title . "</h4>
+								<h4 style=\"margin-top: 0px; font-size: 14px; width: 240px;\">" . htmlspecialchars($photo->title) . "</h4>
 								<p style=\"margin-top: 5px; margin-bottom: 5px;\"><a href=\"/photo.php?id=". $photo->id . "\"><img src=\"photos/". $photo->id . ".m.jpg\"></a></p>
-								<p style=\"width: 225px; margin-left: 6px; margin-top: 5px; margin-bottom: 5px;\">" . $photo->description . "</p>
+								<p style=\"width: 225px; margin-left: 6px; margin-top: 5px; margin-bottom: 5px;\">" . htmlspecialchars($photo->description) . "</p>
 
 								<p style=\"font-size: 11px; margin-top: 5px; margin-bottom: 0px; width: 240px;\">
 	<img src=\"/images/icon_public.gif\" style=\"vertical-align:middle; margin-right: 4px; margin-bottom: 4px; float:left; border:none;\" alt=\"This photo is public\" width=\"15\" height=\"15\" />This photo is public.

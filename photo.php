@@ -77,7 +77,7 @@ if ($add_view) {
 
 ?>
 <script type="text/javascript">document.title = "<?php echo $photo->title . " on " . $website["instance_name"] . " - Photo Sharing!"; ?>";</script> <!-- award for the world's hackiest fix goes to... -->
-	<h1 style="margin-bottom: 10px;"><?php echo $photo->title; ?></h1>
+	<h1 style="margin-bottom: 10px;"><?php echo htmlspecialchars($photo->title); ?></h1>
 	<table>
 		<tr>			
 			<td id="GoodStuff"> 
@@ -130,7 +130,7 @@ if ($add_view) {
 								</tr>
 								<tr>
 									<td colspan="2" style="padding-top: 10px; padding-left: 65px;">
-										<p style="width: 450px;"><?php echo $photo->description; ?></p>
+										<p style="width: 450px;"><?php echo htmlspecialchars($photo->description); ?></p>
 										<?php if(isset($photo->camera)) {
 											if($photo->camera !== "Unavailable") {
 											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo->camera . "</a>.</p>";
