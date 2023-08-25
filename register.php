@@ -4,7 +4,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 if(isset($_POST["Submit"])) {
 	$email = $_POST["reg_email"];
 	$username = preg_replace("/<[^>]*>/", "", $_POST["username"]);
-	$username = str_replace(['"',"'"], "", $username)
+	$username = str_replace(['"',"'"], "", $username);
 	$password = $_POST["password"];
 	// now, check the length.
 	if(strlen($email) > 60) { die(); }
