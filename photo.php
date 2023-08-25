@@ -26,7 +26,7 @@ $Now = new DateTime($photo->uploaded_on);
 
 // Handle comments
 if(isset($_POST["submit"])) {
-	$comment = htmlspecialchars($_POST["comment"]);
+	$comment = $_POST["comment"];
 	if(mb_strlen($comment, 'utf8') > 200) { die("comment text too long. max length is 200"); }
 	if(mb_strlen($comment, 'utf8') < 1) { die("comment text is non existent"); }
 	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (:posted_to, :posted_by, :text)");
