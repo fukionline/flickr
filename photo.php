@@ -130,7 +130,7 @@ if ($add_view) {
 								</tr>
 								<tr>
 									<td colspan="2" style="padding-top: 10px; padding-left: 65px;">
-										<p style="width: 450px;"><?php echo htmlspecialchars($photo->description); ?></p>
+										<p style="width: 450px;"><?php echo nl2br(htmlspecialchars($photo->description)); ?></p>
 										<?php if(isset($photo->camera)) {
 											if($photo->camera !== "Unavailable") {
 											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo->camera . "</a>.</p>";
@@ -201,7 +201,7 @@ if ($add_view) {
 							echo "<tr>
 						<td valign=\"top\"><a href=\"/profile.php?id=". $comment->posted_by . "\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
 						<td>
-							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
+							<h4><a href=\"profile.php?id=". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". htmlspecialchars($comment->text) . "<br />
 								<span class=\"PostDateTime\">
 									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "

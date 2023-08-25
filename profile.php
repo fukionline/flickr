@@ -61,7 +61,7 @@ $Now = new DateTime($user->last_login);
 			</td>
 			<td id="GoodStuff">
 			<?php if(isset($user->about)) {
-				echo "<p>" . htmlspecialchars($user->about) . "</p>";
+				echo "<p>" . nl2br(htmlspecialchars($user->about)) . "</p>";
 			}
 			?>
 			<!-- <p>I'm <strong>Other</strong>.</p> -->

@@ -82,7 +82,7 @@ if(isset($_POST["Submit"])) {
 			</tr>
 			<tr>
 				<td class="Label">Description:</td>
-				<td valign="top" class="DateTime"><input type="text" name="description" value="" size="50"><br /></td>
+				<td valign="top" class="DateTime"><textarea style="width:300px;height:120px" name="description"></textarea></td>
 			</tr>
 			<tr>
 				<td class="Label">Tags:</td>

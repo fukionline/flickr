@@ -24,13 +24,14 @@ if(isset($_POST["Submit"])) {
 		
 		$password_ok = false;
 		
-		if (strpos($password_db, 'BCrypt') === 0) {
-			if (password_verify($_POST["password"], $password_db)) {
-				$password_ok = true;
-			} 
-		} else {
+		if(!(str_starts_with($password_db, "BCrypt"))) {
 			if ($password_db == sha1($_POST["password"].$website["sha1_salt"])) {
 				$password_ok = true;	
+			}
+		} else {
+			$password_db = preg_replace("/BCrypt/", "", $password_db);
+			if(password_verify($_POST["password"], $password_db)) {
+				$password_ok = true;
 			}
 		}
 		
@@ -49,8 +50,10 @@ if(isset($_POST["Submit"])) {
 			$stmt->execute();
 			header("Location: /");
 		} else {
-			die("user does not exist");
+			die("wrong password");
 		}
+	} else {
+		die("user does not exist");
 	}
 }
 		
