@@ -9,6 +9,10 @@ $stmt->bindParam(':t0', $_GET["id"]);
 $stmt->execute();
 foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
+if($stmt->rowCount() == 0) {
+	die("user does not exist");
+}
+	
 $Now = new DateTime($user->last_login);
 
 if(substr($user->screen_name, -1) == "s") { 
