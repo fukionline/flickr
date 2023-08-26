@@ -2,7 +2,7 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php"); 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/logincheck.php"); 
 
-$fields = array(/* "fname", "lname", */ "about", "site_addr", "site_name", "off_occ", "off_hometown", "off_city", "off_country", "things_interests", "things_books", "things_movies", "things_music");
+$fields = array("fname", "lname", "about", "site_addr", "site_name", "off_occ", "off_hometown", "off_city", "off_country", "things_interests", "things_books", "things_movies", "things_music");
 
 $stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
 $stmt->bindParam(':t0', $user_id);
@@ -18,6 +18,8 @@ if(isset($_POST["Submit"])) {
 	}
 	
 	// Variable hell
+	$fname				= $_POST["fname"];
+	$lname				= $_POST["lname"];
 	$about 				= $_POST["about"];
 	$site_addr 			= $_POST["site_addr"];
 	$site_name 			= $_POST["site_name"];
@@ -31,18 +33,20 @@ if(isset($_POST["Submit"])) {
 	$things_music 		= $_POST["things_music"];
 	
 	// SQL Hell
-	$stmt = $conn->prepare("UPDATE users SET about=:t0, site_addr=:t1, site_name=:t2, off_occ=:t3, off_hometown=:t4, off_city=:t5, off_country=:t6, things_interests=:t7, things_books=:t8, things_movies=:t9, things_music=:t10 WHERE id=:uid");
-	$stmt->bindParam(":t0", $about);
-	$stmt->bindParam(":t1", $site_addr);
-	$stmt->bindParam(":t2", $site_name);
-	$stmt->bindParam(":t3", $off_occ);
-	$stmt->bindParam(":t4", $off_hometown);
-	$stmt->bindParam(":t5", $off_city);
-	$stmt->bindParam(":t6", $off_country);
-	$stmt->bindParam(":t7", $things_interests);
-	$stmt->bindParam(":t8", $things_books);
-	$stmt->bindParam(":t9", $things_movies);
-	$stmt->bindParam(":t10", $things_music);
+	$stmt = $conn->prepare("UPDATE users SET fname=:t0, lname=:t1, about=:t2, site_addr=:t3, site_name=:t4, off_occ=:t5, off_hometown=:t6, off_city=:t7, off_country=:t8, things_interests=:t9, things_books=:t10, things_movies=:t11, things_music=:t12 WHERE id=:uid");
+	$stmt->bindParam(":t0", $fname);
+	$stmt->bindParam(":t1", $lname);
+	$stmt->bindParam(":t2", $about);
+	$stmt->bindParam(":t3", $site_addr);
+	$stmt->bindParam(":t4", $site_name);
+	$stmt->bindParam(":t5", $off_occ);
+	$stmt->bindParam(":t6", $off_hometown);
+	$stmt->bindParam(":t7", $off_city);
+	$stmt->bindParam(":t8", $off_country);
+	$stmt->bindParam(":t9", $things_interests);
+	$stmt->bindParam(":t10", $things_books);
+	$stmt->bindParam(":t11", $things_movies);
+	$stmt->bindParam(":t12", $things_music);
 	$stmt->bindParam(":uid", $user_id);
 	$stmt->execute();
 	header("Location: /profile_edit.php");
@@ -60,16 +64,14 @@ if(isset($_POST["Submit"])) {
 			<td id="GoodStuff" valign="top">
 				<form method="post">
 				<table style="margin-left: 27px">
-					<!--
 					<tr>
 						<td align="right"><b>First Name:</b></td>
-						<td><input type="text" name="fname"  size="30" value="" /></td>
+						<td><input type="text" name="fname"  size="30" value="<?php echo htmlspecialchars($user->fname); ?>" /></td>
 					</tr>
 					<tr>
 						<td align="right"><b>Last Name:</b></td>
-						<td><input type="text" name="lname"  size="30" value="" /></td>
+						<td><input type="text" name="lname"  size="30" value="<?php echo htmlspecialchars($user->lname); ?>" /></td>
 					</tr>
-					-->
 					<tr>
 						<td valign="top" align="right"><b>Describe Yourself...</b></td>
 						<td><textarea style="width:300px;height:120px" name="about"><?php echo htmlspecialchars($user->about); ?></textarea></td>

@@ -24,7 +24,7 @@ if(substr($user->screen_name, -1) == "s") {
 $Now = new DateTime($user->last_login);
 ?>
 
-	<h1><img src="<?php echo $user->display_picture; ?>" alt="buddy icon" width="48" height="48" border="0" align="absmiddle" class="xBuddyIconH"><?php echo htmlspecialchars($user->screen_name); ?></h1>
+	<h1><img src="<?php echo $user->display_picture; ?>" alt="buddy icon" width="48" height="48" border="0" align="absmiddle" class="xBuddyIconH"><?php echo htmlspecialchars($user->screen_name); ?> <?php if(!(empty($user->fname || $user->lname))) { echo "<span class=\"RealName\">/ " . htmlspecialchars($user->fname) . " " . htmlspecialchars($user->lname) ."</span>"; } ?></h1>
 	<?php if($user->isBanned == 1) {
 			echo "<p class=\"Problem\" style=\"margin-top: 30px; margin-left: 60px;\">This person is no longer active on " . $website["instance_name"] . "</p>";
 			die(require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"));
