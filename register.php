@@ -19,8 +19,18 @@ if(isset($_POST["Submit"])) {
 	$password = "BCrypt".$password;
 	// ----------------------
 	// And now, the actual signup
-	$result = $conn->query("SELECT email FROM users WHERE email = '$email'");
+	
+	$result = $conn->query("SELECT email FROM users WHERE email = '$username'");
 	if($result->rowCount() == 0) {
+		$login_ok = true;
+	} else die();
+	
+	$result = $conn->query("SELECT screen_name FROM users WHERE screen_name = '$username'");
+	if($result->rowCount() == 0) {
+		$login_ok = true;
+	} else die();
+	
+	if($login_ok) {
 		$stmt = $conn->prepare("INSERT INTO users (screen_name, password, email) VALUES (:screen_name, :password, :email)");
 		$stmt->bindParam(':screen_name', $username);
 		$stmt->bindParam(':password', $password);
@@ -33,9 +43,8 @@ if(isset($_POST["Submit"])) {
 		$_SESSION["screen_name"] = $username;
 		header("Location: /login.php");
 	} else {
-		header("Location: /register.php?err=4");
+		die();
 	}
-	$conn->close();
 }
 
 ?>

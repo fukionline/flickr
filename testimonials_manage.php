@@ -63,7 +63,7 @@ if(isset($_GET["approve"])) {
 							<td valign=\"top\"><img src=\"". $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></td>
 							<td>
 							<h4><a href=\"profile.php?id=". $testimonial->sent_to . "\">". $tst_user->screen_name . "</a> says:</h4>
-							<p>\"". htmlspecialchars($testimonial->text) . "\"</p><a href=\"?approve=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallButt\" value=\"APPROVE\" style=\"padding: 3px\"></a> OR <a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
+							<p>\"". htmlspecialchars(nl2br($testimonial->text)) . "\"</p><a href=\"?approve=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallButt\" value=\"APPROVE\" style=\"padding: 3px\"></a> OR <a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
 							</td>
 						</tr></table>
 						";
@@ -86,7 +86,7 @@ if(isset($_GET["approve"])) {
 							<td valign=\"top\"><img src=\"". $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></td>
 							<td>
 							<h4>You said this about <a href=\"profile.php?id=". $testimonial->sent_to . "\">". $tst_user->screen_name . "</a>:</h4>
-							<p>\"". htmlspecialchars($testimonial->text) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
+							<p>\"". htmlspecialchars(nl2br($testimonial->text)) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
 							</td>
 						</tr></table>
 						";
@@ -116,7 +116,7 @@ if(isset($_GET["approve"])) {
 						<td valign=\"top\"><img src=\"". $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></td>
 						<td>
 						<h4>You said this about <a href=\"profile.php?id=". $testimonial->sent_to . "\">". $tst_user->screen_name . "</a>:</h4>
-						<p>\"". htmlspecialchars($testimonial->text) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
+						<p>\"". htmlspecialchars(nl2br($testimonial->text)) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
 						</td>
 					</tr></table>
 					";
@@ -134,7 +134,7 @@ if(isset($_GET["approve"])) {
 						<td valign=\"top\"><img src=\"". $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></td>
 						<td>
 						<h4>You said this about <a href=\"profile.php?id=". $testimonial->sent_to . "\">". $tst_user->screen_name . "</a>:</h4>
-						<p>\"". htmlspecialchars($testimonial->text) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
+						<p>\"". htmlspecialchars(nl2br($testimonial->text)) . "\"</p><a href=\"?delete=" . $testimonial->id . "\"><input type=\"submit\" class=\"SmallDeleteButt\" value=\"DELETE\" style=\"padding: 3px\"></a>
 						</td>
 					</tr></table>
 					";
