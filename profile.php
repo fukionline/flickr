@@ -86,8 +86,8 @@ $Now = new DateTime($user->last_login);
 					$stmt->execute();
 					foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $tst_user);
 					echo "<p id=\"Testi\">
-					<a href=\"". $testimonial->sent_by . "\"><img src=\"" . $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" border=\"0\" class=\"BuddyIconTestimonial\"></a>
-					<strong><a href=\"profile.php?user=". $testimonial->sent_by . "\">" . $tst_user->screen_name . "</a> says:</strong><br>
+					<a href=\"profile.php?id=". $testimonial->sent_by . "\"><img src=\"" . $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" border=\"0\" class=\"BuddyIconTestimonial\"></a>
+					<strong><a href=\"profile.php?id=". $testimonial->sent_by . "\">" . $tst_user->screen_name . "</a> says:</strong><br>
 					\"" . htmlspecialchars(nl2br($testimonial->text)) . "\"<br clear=\"all\">
 				</p>";
 				}
