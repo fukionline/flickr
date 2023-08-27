@@ -32,11 +32,17 @@ $Now = new DateTime($user->last_login);
 	?>
 	<table>
 		<tr>
-			<td id="Hint">			
-			<h2 class="PhotosTease" style="font-weight: bold;"><a href="/profile_photos.php?id=<?php echo $_GET["id"]; ?>"> <?php echo $sn_display; ?> photos</a></h2>
+			<td id="Hint">
 			<?php
+			
+			if($_SESSION["id"] == $_GET["id"]) {
+				echo "<span>This is how you appear when someone views your profile.</span>
+				<h2 class=\"EditThisLeft\" style=\"padding-left: 8px;\"><img src=\"/images/pencil.gif\"> <a href=\"profile_edit.php\">Edit this page</a></h2>";
+			}
+			
 			if(!isset($_SESSION["id"])) {
-				echo "<table class=\"Tease\" cellspacing=\"0\" cellpadding=\"0\">
+				echo "<h2 class=\"PhotosTease\" style=\"font-weight: bold;\"><a href=\"/profile_photos.php?id=" . $_GET["id"] . "\">" . $sn_display . " photos</a></h2>
+				<table class=\"Tease\" cellspacing=\"0\" cellpadding=\"0\">
 					<tr>
 						<td><span style=\"font-weight: bold; color:#FF6699;\">PSST!</span> To make your own profile, just choose a screen name...</td>
 					</tr>
@@ -50,6 +56,8 @@ $Now = new DateTime($user->last_login);
 			</tr>
 		</table>
 	</form>";
+			} else if($_SESSION["id"] == $_GET["id"]) {
+				echo "<h2 class=\"PhotosTease\" style=\"font-weight: bold;\"><a href=\"/profile_photos.php?id=" . $_GET["id"] . "\">Your photos</a></h2>";
 			}
 			
 			$stmt = $conn->prepare("SELECT * FROM photos WHERE uploaded_by=:t0 ORDER by id DESC LIMIT 1");
@@ -60,7 +68,35 @@ $Now = new DateTime($user->last_login);
 					echo "<div class=\"ToDoProfile\" style=\"text-align: center;\"><a href=\"/gallery_view.php?id=" . $_GET["id"] . "\"><img src=\"/photos/". $photo->id . ".t.jpg\" alt=\"Click to view gallery\" style=\"margin-bottom:10px; border: solid 1px #000000\"><br /><strong>View Gallery</strong></a></div>";
 				}
 			}
+			echo "<h3 style=\"margin-top: 30px;\">Testimonials </h3>";
+			
+			if($_SESSION["id"] == $_GET["id"]) {
+				echo "<a href=\"testimonials_manage.php\">Manage your testimonials</a>";
+			} else if($_SESSION["id"] !== $_GET["id"]) {
+				echo "<a href=\"testimonials_write.php?id=" . $_GET["id"] . "\">Write a testimonial about " . $user->screen_name . "</a>";
+			}
+			
+			$stmt = $conn->prepare("SELECT * from testimonials WHERE sent_to=:t0 AND approved=1");
+			$stmt->bindParam(":t0", $_GET["id"]);
+			$stmt->execute();
+			if($stmt->rowCount() > 0) {
+				foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $testimonial) {
+					$stmt = $conn->prepare("SELECT * FROM users WHERE id=:t0");
+					$stmt->bindParam(':t0', $testimonial->sent_by);
+					$stmt->execute();
+					foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $tst_user);
+					echo "<p id=\"Testi\">
+					<a href=\"". $testimonial->sent_by . "\"><img src=\"" . $tst_user->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" border=\"0\" class=\"BuddyIconTestimonial\"></a>
+					<strong><a href=\"profile.php?user=". $testimonial->sent_by . "\">" . $tst_user->screen_name . "</a> says:</strong><br>
+					\"" . htmlspecialchars(nl2br($testimonial->text)) . "\"<br clear=\"all\">
+				</p>";
+				}
+			} else if(!($_SESSION["id"] == $_GET["id"])) {
+				echo "<p id=\"Testi\">". $user->screen_name . " doesn't have any testimonials yet.</p>";
+			} else echo "<p id=\"Testi\">Nobody has added a testimonial for you yet.</p>";
+			
 			?>
+			
 			<img src="/images/spaceball.gif" alt="spacer image" width="160" height="1">
 			</td>
 			<td id="GoodStuff">
@@ -90,7 +126,10 @@ $Now = new DateTime($user->last_login);
 			</p>
 				
 			<?php if(!empty($user->off_hometown || $user->off_occ || $user->things_interests || $user->things_books || $user->things_movies || $user->things_music)) {
-				echo "<h3>A bit more about ". $user->screen_name . "...</h3>";
+				if($_SESSION["id"] == $_GET["id"]) {
+					echo "<h3>A bit more about you...</h3>";
+				} else echo "<h3>A bit more about ". $user->screen_name . "...</h3>";
+			
 				echo "<table>";
 				
 					if(isset($user->off_hometown)) {

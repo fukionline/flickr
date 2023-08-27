@@ -136,6 +136,7 @@ if(isset($_POST["Submit"])) {
 				
 				<input name="Submit" type="submit" class="Butt" value="SAVE IT">
 				</form>
+				<p>Or, <a href="/profile.php?id=<?php echo $_SESSION["id"]; ?>">go back to your profile page</a>.</p>
 			</td>
 		</tr>
 	</table>

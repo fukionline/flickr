@@ -34,7 +34,7 @@ flickr_badge_image_border = "1px solid #000000";
 flickr_badge_link_color = ""; 
 -->
 </script>
-<script type="text/javascript" src="http://<?php echo $_SERVER["SERVER_NAME"]; ?>/badge_code.php?nsid=<?php echo $user_id; ?>&count=10&display=latest&name=1&size=thumb&raw=1"></script>
+<script type="text/javascript" src="//<?php echo $_SERVER["SERVER_NAME"]; ?>/badge_code.php?nsid=<?php echo $user_id; ?>&count=10&display=latest&name=1&size=thumb&raw=1"></script>
 <!-- <?php echo $website["instance_name"]; ?> Badge End -->
 </textarea><br>
 <center><input type="submit" class="SmallButt" value="COPY TO CLIPBOARD" style="padding: 5px" onclick="copy();"></center>
