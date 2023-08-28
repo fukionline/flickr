@@ -76,7 +76,6 @@ if ($add_view) {
 }
 
 ?>
-<script type="text/javascript">document.title = "<?php echo $photo->title . " on " . $website["instance_name"] . " - Photo Sharing!"; ?>";</script> <!-- award for the world's hackiest fix goes to... -->
 	<h1 style="margin-bottom: 10px;"><?php echo htmlspecialchars($photo->title); ?></h1>
 	<table>
 		<tr>			
