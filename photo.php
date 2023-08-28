@@ -117,7 +117,7 @@ if ($add_view) {
 											$thetags = array_merge($thetags, explode(" ", $photo->tags));
 											$thetags = array_unique($thetags);
 											foreach($thetags as $tag) {
-												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">$tag</a></div>";
+												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">" . htmlspecialchars($tag) . "</a></div>";
 											}
 										}
 											?>
