@@ -30,9 +30,9 @@ $stmt->execute();
 foreach($stmt->fetchAll(PDO::FETCH_OBJ) as $user);
 
 if(substr($user->screen_name, -1) == "s") { 
-	$sn_display = $user->screen_name . "\'"; 
+	$sn_display = htmlspecialchars($user->screen_name) . "'"; 
 } else {
-	$sn_display = $user->screen_name . "\'s";
+	$sn_display = htmlspecialchars($user->screen_name) . "'s";
 }
 
 $url = "http://" . $_SERVER['SERVER_NAME'];

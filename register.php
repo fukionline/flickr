@@ -3,7 +3,8 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/incl/header.php");
 
 if($_SERVER['REQUEST_METHOD'] == "POST") {
 	$email = $_POST["reg_email"];
-	$username = preg_replace("/[^a-zA-Z0-9]+/", "", $_POST["username"]);
+	$username = preg_replace("/<[^>]*>/", "", $_POST["username"]);
+	$username = str_replace(['"',"'"], "", $username);
 	$password = $_POST["password"];
 	// now, check the length.
 	if(strlen($email) > 60) {$error = true;}
@@ -16,12 +17,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 	// ----------------------
 	$password = password_hash($password, PASSWORD_BCRYPT);
 	$password = "BCrypt".$password;
-	
 	// ----------------------
 	// And now, the actual signup
-	if ($error != true) {
-	$result = $conn->query("SELECT email FROM users WHERE email = '$email'");
+  $result = $conn->query("SELECT email FROM users WHERE email = '$username'");
 	if($result->rowCount() == 0) {
+		$login_ok = true;
+	} else die();
+	
+	$result = $conn->query("SELECT screen_name FROM users WHERE screen_name = '$username'");
+	if($result->rowCount() == 0) {
+		$login_ok = true;
+	} else die();
+	
+	if($login_ok) {
 		$stmt = $conn->prepare("INSERT INTO users (screen_name, password, email) VALUES (:screen_name, :password, :email)");
 		$stmt->bindParam(':screen_name', $username);
 		$stmt->bindParam(':password', $password);
@@ -34,9 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 		$_SESSION["screen_name"] = $username;
 		header("Location: /login.php");
 	} else {
-		header("Location: /register.php?err=4");
-	}
-	$conn->close();
+		die();
 	}
 }
 
@@ -87,10 +93,12 @@ function set_username(username){
 						<td class="Label">Password:</td>
 						<td><input type="password" name="password" value=""></td>
 					</tr>
+					<!--
 					<tr>
 						<td>&nbsp;</td>
 						<td><input type="checkbox" name="terms" value="1"> I am over 13 years old, and have read the fascinating <a href="/terms.php" onClick="window.open('/terms.php','TOC','status=yes,scrollbars=yes,resizable=yes,width=600,height=480'); return false;">Terms of Use</a>.</td>
 					</tr>
+					-->
 					<tr>
 						<td>&nbsp;</td>
 						<td><input name="Submit" type="submit" class="Butt" value="SIGN UP"></td>
@@ -111,3 +119,5 @@ function set_username(username){
 document.getElementById('username_field').focus();
 //-->
 </script>
+
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/incl/footer.php"); ?>

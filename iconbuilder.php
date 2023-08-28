@@ -32,7 +32,11 @@ if(isset($_POST["upload"])) {
 		case IMAGETYPE_PNG:
 			$gdimage = imagecreatefrompng($upload_tgt_preload);
 			$bg = imagecreatetruecolor(imagesx($gdimage), imagesy($gdimage));
-			$gdimage = $bg; 
+			imagefill($bg, 0, 0, imagecolorallocate($bg, 255, 255, 255));
+			imagealphablending($bg, TRUE);
+			imagecopy($bg, $gdimage, 0, 0, 0, 0, imagesx($gdimage), imagesy($gdimage));
+			imagedestroy($gdimage);
+			$gdimage = $bg;
 			break;
 		case IMAGETYPE_JPEG:
 			$gdimage = imagecreatefromjpeg($upload_tgt_preload);

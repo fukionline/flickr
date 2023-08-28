@@ -26,7 +26,7 @@ $Now = new DateTime($photo->uploaded_on);
 
 // Handle comments
 if(isset($_POST["submit"])) {
-	$comment = htmlspecialchars($_POST["comment"]);
+	$comment = $_POST["comment"];
 	if(mb_strlen($comment, 'utf8') > 200) { die("comment text too long. max length is 200"); }
 	if(mb_strlen($comment, 'utf8') < 1) { die("comment text is non existent"); }
 	$stmt = $conn->prepare("INSERT INTO comments (posted_to, posted_by, text) VALUES (:posted_to, :posted_by, :text)");
@@ -76,8 +76,7 @@ if ($add_view) {
 }
 
 ?>
-<script type="text/javascript">document.title = "<?php echo $photo->title . " on " . $website["instance_name"] . " - Photo Sharing!"; ?>";</script> <!-- award for the world's hackiest fix goes to... -->
-	<h1 style="margin-bottom: 10px;"><?php echo $photo->title; ?></h1>
+	<h1 style="margin-bottom: 10px;"><?php echo htmlspecialchars($photo->title); ?></h1>
 	<table>
 		<tr>			
 			<td id="GoodStuff"> 
@@ -118,7 +117,7 @@ if ($add_view) {
 											$thetags = array_merge($thetags, explode(" ", $photo->tags));
 											$thetags = array_unique($thetags);
 											foreach($thetags as $tag) {
-												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">$tag</a></div>";
+												echo "<div id=\"tagdiv\"><a href=\"#\" class=\"pale\">" . htmlspecialchars($tag) . "</a></div>";
 											}
 										}
 											?>
@@ -130,7 +129,7 @@ if ($add_view) {
 								</tr>
 								<tr>
 									<td colspan="2" style="padding-top: 10px; padding-left: 65px;">
-										<p style="width: 450px;"><?php echo $photo->description; ?></p>
+										<p style="width: 450px;"><?php echo nl2br(htmlspecialchars($photo->description)); ?></p>
 										<?php if(isset($photo->camera)) {
 											if($photo->camera !== "Unavailable") {
 											echo "<p style=\"font-style: italic; color: #666; width: 450px;\">Taken with a <a href=\"photo_exif.php?id=" . $_GET["id"] . "\" style=\"color: #4B8FE3;\">" . $photo->camera . "</a>.</p>";
@@ -201,7 +200,7 @@ if ($add_view) {
 							echo "<tr>
 						<td valign=\"top\"><a href=\"/profile.php?id=". $comment->posted_by . "\" name=\"comment" . $comment->id . "\"><img src=\"". $commenter->display_picture . "\" alt=\"view profile\" width=\"48\" height=\"48\" align=\"left\" hspace=\"5\" /></a></td>
 						<td>
-							<h4><a href=\"/people/". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
+							<h4><a href=\"profile.php?id=". $comment->posted_by . "\">". $commenter->screen_name . "</a> says:</h4>
 							<p>". htmlspecialchars($comment->text) . "<br />
 								<span class=\"PostDateTime\">
 									Posted at ". $Now->format('d') . " " . $Now->format('M') . " '" . $Now->format('y') . ", ". $Now->format('h') . "." . $Now->format('i') . strtolower($Now->format('A')) . "
